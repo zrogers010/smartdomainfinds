@@ -31,8 +31,11 @@ if [[ -f "$ENV_FILE" ]]; then
   set +a
 fi
 
+# --include=dev is required: the env file sets NODE_ENV=production, which would
+# otherwise make npm omit devDependencies (typescript, tailwind, vitest) that the
+# build + tests need. The runtime itself only uses production deps.
 log "Installing dependencies (npm ci)"
-npm ci
+npm ci --include=dev
 
 log "Running tests"
 npm test
