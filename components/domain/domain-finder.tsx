@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { Dice5, Frown, Info, Search, Sparkles, SpellCheck2 } from "lucide-react";
+import { Dice5, Frown, Info, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import type {
@@ -280,36 +280,9 @@ export function DomainFinder() {
                   </p>
                 )}
               </div>
-
-              {metadata?.corrections && metadata.corrections.length > 0 && (
-                <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <SpellCheck2 className="size-4 shrink-0 text-primary" />
-                  <span>
-                    Showing results for{" "}
-                    <span className="font-medium text-foreground">
-                      {metadata.correctedIdea}
-                    </span>
-                    {" — corrected "}
-                    {metadata.corrections.map((c, i) => (
-                      <React.Fragment key={`${c.from}-${i}`}>
-                        {i > 0 && ", "}
-                        <span className="line-through">{c.from}</span>
-                        {" → "}
-                        <span className="font-medium text-foreground">
-                          {c.to}
-                        </span>
-                      </React.Fragment>
-                    ))}
-                  </span>
-                </p>
-              )}
             </div>
 
-            <DomainFilters
-              results={results}
-              filters={filters}
-              onChange={setFilters}
-            />
+            <DomainFilters filters={filters} onChange={setFilters} />
 
             {visibleResults.length > 0 ? (
               <DomainResultsGrid

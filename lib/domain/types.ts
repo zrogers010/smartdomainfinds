@@ -97,19 +97,12 @@ export type DomainResult = {
   alternatives: string[];
 };
 
-/** A single spelling fix applied to the user's idea, e.g. miediavel -> medieval. */
-export type SpellingCorrection = { from: string; to: string };
-
 export type GenerateMetadata = {
   generatedCount: number;
   checkedCount: number;
   provider: string;
   /** True when results came from the seeded demo generator (no AI key). */
   usedFallback: boolean;
-  /** The idea text after spelling correction, present only when something changed. */
-  correctedIdea?: string;
-  /** Individual spelling fixes applied to the idea. */
-  corrections?: SpellingCorrection[];
 };
 
 export type GenerateResponse = {
@@ -118,8 +111,17 @@ export type GenerateResponse = {
   metadata: GenerateMetadata;
 };
 
-export type CheckDomainResponse = {
-  results: DomainAvailabilityResult[];
+/**
+ * Response for POST /api/search. Candidate generation + scoring happen on the
+ * server; the client receives finished DomainResult objects and only renders
+ * them. `primary` is returned for part="primary"; `exact`/`variations` for
+ * part="rest".
+ */
+export type SearchResponse = {
+  label: string;
+  primary?: DomainResult | null;
+  exact?: DomainResult[];
+  variations?: DomainResult[];
 };
 
 export type GenerateMoreResponse = {

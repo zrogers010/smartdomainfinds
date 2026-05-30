@@ -1,0 +1,48 @@
+# systemd unit for SmartDomainFinds (Next.js standalone server).
+# Install to: /etc/systemd/system/smartdomainfinds.service
+#
+#   sudo cp deploy/smartdomainfinds.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now smartdomainfinds
+#
+# Adjust paths/user below if your layout differs.
+
+[Unit]
+Description=SmartDomainFinds (Next.js)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+
+# The app is cloned here; the standalone server lives under .next/standalone.
+WorkingDirectory=/home/deploy/smartdomainfinds/.next/standalone
+ExecStart=/usr/bin/env node server.js
+
+# Runtime configuration. Secrets/config live OUTSIDE the repo (see DEPLOY.md).
+Environment=NODE_ENV=production
+Environment=PORT=3000
+# Bind to localhost only — Caddy terminates TLS and proxies to us.
+Environment=HOSTNAME=127.0.0.1
+EnvironmentFile=/etc/smartdomainfinds/env
+
+Restart=always
+RestartSec=3
+# Give Node a chance to start before we consider it failed.
+TimeoutStartSec=30
+
+# --- Hardening ---
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/deploy/smartdomainfinds
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

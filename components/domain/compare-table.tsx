@@ -1,6 +1,6 @@
 "use client";
 
-import { SCORE_WEIGHTS } from "@/lib/domain/scoring";
+import { SCORE_WEIGHTS } from "@/lib/domain/score-display";
 import type { DomainResult } from "@/lib/domain/types";
 import { DOMAIN_STYLE_LABELS } from "@/lib/domain/types";
 import { cn } from "@/lib/utils/cn";

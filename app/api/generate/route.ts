@@ -5,12 +5,15 @@ import { GenerateRequestSchema } from "@/schemas/domain";
 import { generateDomainCandidates } from "@/lib/ai/generate-domain-candidates";
 import { assembleDomainResults } from "@/lib/domain/availability";
 import { getAvailabilityProvider } from "@/lib/domain/provider";
-import { correctText } from "@/lib/domain/spellcheck";
+import { enforceRateLimit } from "@/lib/server/rate-limit";
 import type { GenerateResponse } from "@/lib/domain/types";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  const limited = enforceRateLimit(req, "generate", 30, 60_000);
+  if (limited) return limited;
+
   let body: unknown;
   try {
     body = await req.json();
@@ -24,16 +27,10 @@ export async function POST(req: Request) {
   try {
     const request = GenerateRequestSchema.parse(body);
 
-    // Fix likely misspellings in the idea so generated names use correct words.
-    const { corrected, corrections } = correctText(request.idea);
-    const effectiveRequest =
-      corrections.length > 0 ? { ...request, idea: corrected } : request;
-
-    const { names, usedFallback } =
-      await generateDomainCandidates(effectiveRequest);
+    const { names, usedFallback } = await generateDomainCandidates(request);
     const { results, checkedCount } = await assembleDomainResults(
       names,
-      effectiveRequest,
+      request,
       { limit: 36 }
     );
 
@@ -47,8 +44,6 @@ export async function POST(req: Request) {
         checkedCount,
         provider: provider.name,
         usedFallback,
-        correctedIdea: corrections.length > 0 ? corrected : undefined,
-        corrections: corrections.length > 0 ? corrections : undefined,
       },
     };
 

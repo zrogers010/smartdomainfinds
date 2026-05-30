@@ -1,16 +1,25 @@
 /**
  * Minimal OpenAI-compatible chat client built on fetch (no SDK dependency).
- * Works against the OpenAI API or any compatible endpoint via OPENAI_BASE_URL.
+ * Works against any OpenAI-compatible endpoint, selected purely via env vars:
  *
- * When no API key is configured, {@link isAiConfigured} returns false and
- * callers fall back to seeded demo data so the app still works end-to-end.
+ *   OpenAI    OPENAI_API_KEY=sk-...            (default base URL)
+ *   Groq      OPENAI_BASE_URL=https://api.groq.com/openai/v1   + key
+ *   Together  OPENAI_BASE_URL=https://api.together.xyz/v1      + key
+ *   DeepInfra OPENAI_BASE_URL=https://api.deepinfra.com/v1/openai + key
+ *   Ollama    OPENAI_BASE_URL=http://localhost:11434/v1        (no key needed)
+ *
+ * AI is considered "on" when either an API key OR an explicit base URL is set.
+ * Otherwise {@link isAiConfigured} returns false and callers fall back to the
+ * seeded demo generator so the app still works end-to-end with zero config.
  */
 
 const DEFAULT_BASE_URL = "https://api.openai.com/v1";
 const DEFAULT_MODEL = "gpt-5.5";
 
 export function isAiConfigured(): boolean {
-  return Boolean(process.env.OPENAI_API_KEY);
+  // An explicit base URL (e.g. a local Ollama server) enables AI even without a
+  // key; hosted providers are enabled by their key.
+  return Boolean(process.env.OPENAI_API_KEY || process.env.OPENAI_BASE_URL);
 }
 
 type ChatMessage = {
@@ -37,27 +46,35 @@ export async function chatCompletion({
   signal,
 }: ChatCompletionOptions): Promise<string> {
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is not configured.");
+  const baseUrlRaw = process.env.OPENAI_BASE_URL;
+  if (!apiKey && !baseUrlRaw) {
+    throw new Error(
+      "No AI provider configured (set OPENAI_API_KEY or OPENAI_BASE_URL)."
+    );
   }
 
-  const baseUrl = (process.env.OPENAI_BASE_URL || DEFAULT_BASE_URL).replace(
-    /\/$/,
-    ""
-  );
+  const baseUrl = (baseUrlRaw || DEFAULT_BASE_URL).replace(/\/$/, "");
   const model = process.env.OPENAI_MODEL || DEFAULT_MODEL;
+
+  // Some local/open endpoints don't implement response_format; allow opting out.
+  const useJsonMode = jsonMode && process.env.OPENAI_JSON_MODE !== "false";
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  // Keyless local servers (e.g. Ollama) need no Authorization header.
+  if (apiKey) {
+    headers.Authorization = `Bearer ${apiKey}`;
+  }
 
   const res = await fetch(`${baseUrl}/chat/completions`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
+    headers,
     body: JSON.stringify({
       model,
       temperature,
       messages,
-      ...(jsonMode ? { response_format: { type: "json_object" } } : {}),
+      ...(useJsonMode ? { response_format: { type: "json_object" } } : {}),
     }),
     signal,
   });

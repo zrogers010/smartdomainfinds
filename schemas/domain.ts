@@ -62,15 +62,17 @@ export const GenerateRequestSchema = z.object({
 
 export type GenerateRequestInput = z.infer<typeof GenerateRequestSchema>;
 
-/** POST /api/check-domain input. */
-export const CheckDomainRequestSchema = z.object({
-  domains: z
-    .array(z.string().trim().min(1))
-    .min(1, "Provide at least one domain to check.")
-    .max(100, "Too many domains in a single request."),
+/**
+ * POST /api/search input. The instant search runs candidate generation and
+ * scoring entirely on the server, so the client only sends the raw query.
+ * `part` lets the UI fetch the headline result first, then the rest.
+ */
+export const SearchRequestSchema = z.object({
+  query: z.string().trim().min(1).max(120),
+  part: z.enum(["primary", "rest"]).default("primary"),
 });
 
-export type CheckDomainRequestInput = z.infer<typeof CheckDomainRequestSchema>;
+export type SearchRequestInput = z.infer<typeof SearchRequestSchema>;
 
 /** POST /api/generate-more-like-this input. */
 export const GenerateMoreRequestSchema = z.object({

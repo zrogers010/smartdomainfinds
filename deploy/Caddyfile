@@ -1,0 +1,23 @@
+# Caddy reverse proxy + automatic HTTPS for SmartDomainFinds.
+# Install to: /etc/caddy/Caddyfile  then  sudo systemctl reload caddy
+#
+# Caddy obtains and renews Let's Encrypt certificates automatically as long as
+# your DNS A record points at this server and ports 80/443 are open.
+#
+# If you also want www, add a redirect block (only after www DNS exists):
+#   www.smartdomainfinds.com { redir https://smartdomainfinds.com{uri} }
+
+smartdomainfinds.com {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		-Server
+	}
+
+	# Cache hashed Next.js static assets aggressively.
+	@nextStatic path /_next/static/*
+	header @nextStatic Cache-Control "public, max-age=31536000, immutable"
+
+	reverse_proxy 127.0.0.1:3000
+}

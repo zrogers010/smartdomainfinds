@@ -70,7 +70,7 @@ Copy `.env.example` to `.env.local`. Everything is optional for local developmen
 app/
   api/
     generate/route.ts                 POST: idea + prefs -> ranked DomainResult[]
-    check-domain/route.ts             POST: domains[] -> availability results
+    search/route.ts                   POST: query -> instant availability + variations
     generate-more-like-this/route.ts  POST: seed domain -> similar names
   layout.tsx                          fonts, theme provider, metadata, toaster
   page.tsx                            header + DomainFinder + features + footer

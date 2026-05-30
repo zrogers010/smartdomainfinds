@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,30 +16,73 @@ const geistMono = Geist_Mono({
 });
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+const gaId = process.env.NEXT_PUBLIC_GA_ID;
+
+const TITLE = "SmartDomainFinds — AI Domain Name Generator & Availability Checker";
+const DESCRIPTION =
+  "Free AI domain name generator. Describe your startup, app, or side project and instantly get brandable, available domain names — checked in real time across .com, .ai, .io, and more, each with a Smart Score.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
   title: {
-    default: "SmartDomainFinds — Find the smartest available domain",
+    default: TITLE,
     template: "%s · SmartDomainFinds",
   },
-  description:
-    "Describe your startup, product, newsletter, app, or side project. SmartDomainFinds generates brandable names, checks availability, scores each option, and helps you pick the best one.",
+  description: DESCRIPTION,
+  applicationName: "SmartDomainFinds",
+  category: "technology",
   keywords: [
     "domain name generator",
-    "AI domain finder",
+    "AI domain name generator",
+    "domain availability checker",
     "startup name generator",
+    "business name generator",
     "brandable domains",
-    "available domains",
+    "available domain names",
+    "check domain availability",
+    "instant domain search",
+    "find a domain name",
   ],
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "SmartDomainFinds — Find the smartest available domain",
-    description:
-      "AI-powered domain name generator and research assistant. Generate, score, and shortlist brandable available domains.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: appUrl,
     siteName: "SmartDomainFinds",
+    locale: "en_US",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  manifest: "/manifest.webmanifest",
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 export default function RootLayout({
@@ -56,6 +100,7 @@ export default function RootLayout({
         <Providers>{children}</Providers>
         <Toaster />
       </body>
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }

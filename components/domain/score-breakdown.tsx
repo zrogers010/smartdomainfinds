@@ -1,4 +1,4 @@
-import { SCORE_WEIGHTS, scoreBucketPercent } from "@/lib/domain/scoring";
+import { SCORE_WEIGHTS, scoreBucketPercent } from "@/lib/domain/score-display";
 import type { DomainScoreBreakdown } from "@/lib/domain/types";
 import { cn } from "@/lib/utils/cn";
 

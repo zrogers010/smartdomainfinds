@@ -58,6 +58,67 @@ function splitWords(value: string): string[] {
     .filter(Boolean);
 }
 
+function useDebounced<T>(value: T, delay: number): T {
+  const [debounced, setDebounced] = React.useState(value);
+  React.useEffect(() => {
+    const id = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(id);
+  }, [value, delay]);
+  return debounced;
+}
+
+/**
+ * Live spelling suggestion for the idea field. Debounces the input, asks the
+ * server to spell-check it, and returns a corrected string when it differs
+ * (and hasn't been dismissed). Non-destructive — the caller decides to apply it.
+ */
+function useSpellingSuggestion(idea: string): {
+  suggestion: string | null;
+  dismiss: () => void;
+} {
+  const debounced = useDebounced(idea, 500);
+  const [suggestion, setSuggestion] = React.useState<string | null>(null);
+  const dismissedRef = React.useRef<string | null>(null);
+
+  React.useEffect(() => {
+    const text = debounced.trim();
+    if (text.length < 8) {
+      setSuggestion(null);
+      return;
+    }
+    const controller = new AbortController();
+    fetch("/api/spellcheck", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+      signal: controller.signal,
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { corrected?: string; corrections?: unknown[] } | null) => {
+        const corrected = data?.corrected;
+        if (
+          corrected &&
+          data?.corrections?.length &&
+          corrected !== text &&
+          corrected !== dismissedRef.current
+        ) {
+          setSuggestion(corrected);
+        } else {
+          setSuggestion(null);
+        }
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, [debounced]);
+
+  const dismiss = React.useCallback(() => {
+    dismissedRef.current = suggestion;
+    setSuggestion(null);
+  }, [suggestion]);
+
+  return { suggestion, dismiss };
+}
+
 export function buildRequest(
   idea: string,
   prefs: Preferences
@@ -124,6 +185,7 @@ export function DomainSearchForm({
 }) {
   const [showPrefs, setShowPrefs] = React.useState(false);
   const prefs = preferences;
+  const { suggestion, dismiss } = useSpellingSuggestion(idea);
 
   const setPref = <K extends keyof Preferences>(
     key: K,
@@ -174,6 +236,30 @@ export function DomainSearchForm({
           className="min-h-[112px] resize-none border-0 bg-transparent px-4 py-3 text-base shadow-none focus-visible:ring-0"
           aria-label="Describe your idea"
         />
+
+        {suggestion && (
+          <div className="px-4 pb-1 text-left text-sm text-muted-foreground">
+            Did you mean{" "}
+            <button
+              type="button"
+              onClick={() => {
+                onIdeaChange(suggestion);
+                dismiss();
+              }}
+              className="font-medium text-primary underline decoration-dotted underline-offset-2 hover:decoration-solid"
+            >
+              {suggestion}
+            </button>
+            ?
+            <button
+              type="button"
+              onClick={dismiss}
+              className="ml-2 text-xs text-muted-foreground/70 hover:text-foreground"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         <div className="flex flex-wrap items-center justify-between gap-2 px-2 pb-1 pt-1">
           <Collapsible open={showPrefs} onOpenChange={setShowPrefs}>

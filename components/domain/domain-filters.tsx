@@ -3,16 +3,9 @@
 import { RotateCcw, SlidersHorizontal } from "lucide-react";
 
 import {
-  DOMAIN_STYLE_LABELS,
-  type DomainResult,
-  type DomainStyle,
-} from "@/lib/domain/types";
-import {
   DEFAULT_FILTERS,
-  availableStyles,
   type AvailabilityFilter,
   type DomainFilterState,
-  type SortKey,
 } from "@/lib/domain/filtering";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -35,22 +28,10 @@ const AVAILABILITY_OPTIONS: { value: AvailabilityFilter; label: string }[] = [
   { value: "hide_taken", label: "Hide taken" },
 ];
 
-const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "smartScore", label: "Smart score" },
-  { value: "availability", label: "Availability" },
-  { value: "shortest", label: "Shortest" },
-  { value: "brandability", label: "Brandability" },
-  { value: "seo", label: "SEO relevance" },
-  { value: "premiumFeel", label: "Premium feel" },
-  { value: "memorability", label: "Memorability" },
-];
-
 export function DomainFilters({
-  results,
   filters,
   onChange,
 }: {
-  results: DomainResult[];
   filters: DomainFilterState;
   onChange: (next: DomainFilterState) => void;
 }) {
@@ -58,8 +39,6 @@ export function DomainFilters({
     key: K,
     value: DomainFilterState[K]
   ) => onChange({ ...filters, [key]: value });
-
-  const styles = availableStyles(results);
 
   return (
     <div className="rounded-xl border border-border bg-card/60 p-4 shadow-sm">
@@ -81,25 +60,6 @@ export function DomainFilters({
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div className="space-y-1.5">
-          <Label className="text-xs text-muted-foreground">Sort by</Label>
-          <Select
-            value={filters.sort}
-            onValueChange={(v) => set("sort", v as SortKey)}
-          >
-            <SelectTrigger className="h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {SORT_OPTIONS.map((o) => (
-                <SelectItem key={o.value} value={o.value}>
-                  {o.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1.5">
           <Label className="text-xs text-muted-foreground">Availability</Label>
           <Select
             value={filters.availability}
@@ -112,26 +72,6 @@ export function DomainFilters({
               {AVAILABILITY_OPTIONS.map((o) => (
                 <SelectItem key={o.value} value={o.value}>
                   {o.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1.5">
-          <Label className="text-xs text-muted-foreground">Style</Label>
-          <Select
-            value={filters.style}
-            onValueChange={(v) => set("style", v as DomainStyle | "all")}
-          >
-            <SelectTrigger className="h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All styles</SelectItem>
-              {styles.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {DOMAIN_STYLE_LABELS[s]}
                 </SelectItem>
               ))}
             </SelectContent>

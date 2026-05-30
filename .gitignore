@@ -22,7 +22,16 @@
 
 # misc
 .DS_Store
+
+# secrets & credentials — never commit these
 *.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+*.crt
+credentials.json
+.npmrc
 
 # debug
 npm-debug.log*
@@ -30,8 +39,14 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — ignore everything except the shareable example templates
+.env
+.env.*
+deploy/env
+deploy/env.production
+deploy/env.*.local
+!.env.example
+!deploy/env.production.example
 
 # vercel
 .vercel

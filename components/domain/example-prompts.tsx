@@ -12,16 +12,21 @@ export function ExamplePrompts({
   className?: string;
 }) {
   return (
-    <div className={cn("flex flex-wrap justify-center gap-2", className)}>
-      {EXAMPLE_PROMPTS.map((prompt) => (
+    <div className={cn("flex flex-wrap justify-center gap-1.5", className)}>
+      {EXAMPLE_PROMPTS.map((prompt, i) => (
         <button
           key={prompt}
           type="button"
           onClick={() => onSelect(prompt)}
-          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/70 px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm transition-all hover:border-primary/40 hover:bg-accent hover:text-foreground"
+          title={prompt}
+          className={cn(
+            "inline-flex max-w-[11rem] items-center gap-1.5 rounded-full border border-border bg-card/70 px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm transition-all hover:border-primary/40 hover:bg-accent hover:text-foreground sm:max-w-[16rem]",
+            // Keep the mobile list short; reveal the rest on larger screens.
+            i >= 3 && "hidden sm:inline-flex"
+          )}
         >
-          <Wand2 className="size-3 text-primary/70" />
-          {prompt}
+          <Wand2 className="size-3 shrink-0 text-primary/70" />
+          <span className="truncate">{prompt}</span>
         </button>
       ))}
     </div>

@@ -36,9 +36,11 @@ function getEngine(): Engine {
   if (cache) return cache;
 
   const dict = enDictionary as { aff: Uint8Array; dic: Uint8Array };
-  const spell = nspell(dict);
+  const aff = Buffer.from(dict.aff);
+  const dic = Buffer.from(dict.dic);
+  const spell = nspell({ aff, dic });
 
-  const dicText = Buffer.from(dict.dic).toString("utf8");
+  const dicText = dic.toString("utf8");
   const bySkeleton = new Map<string, string[]>();
   // First line of a Hunspell .dic is the entry count; the rest are "word/FLAGS".
   for (const line of dicText.split("\n").slice(1)) {

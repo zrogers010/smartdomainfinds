@@ -12,14 +12,13 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import type {
-  CheckDomainResponse,
-  DomainAvailabilityResult,
-  DomainAvailabilityStatus,
+import {
+  SUPPORTED_TLDS,
+  type DomainAvailabilityStatus,
+  type DomainResult,
+  type SearchResponse,
 } from "@/lib/domain/types";
-import { buildSearchCandidates } from "@/lib/domain/search-candidates";
-import { buildResultFromAvailability } from "@/lib/domain/availability";
-import { dedupeDomains, getRegistrarSearchUrl } from "@/lib/domain/utils";
+import { getRegistrarSearchUrl } from "@/lib/domain/utils";
 import { useShortlistStore } from "@/lib/store/shortlist-store";
 import { cn } from "@/lib/utils/cn";
 import { Button } from "@/components/ui/button";
@@ -58,25 +57,21 @@ function formatPrice(amount: number, currency: string) {
   }
 }
 
-/** Check a list of domains, returning results aligned to the input order. */
-async function fetchMany(
-  domains: string[]
-): Promise<DomainAvailabilityResult[]> {
-  const unique = dedupeDomains(domains);
-  if (unique.length === 0) return [];
-
-  const res = await fetch("/api/check-domain", {
+/**
+ * Run the instant search on the server. Candidate generation + scoring happen
+ * in /api/search; we only send the raw query and render the results.
+ */
+async function fetchSearch(
+  query: string,
+  part: "primary" | "rest"
+): Promise<SearchResponse> {
+  const res = await fetch("/api/search", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ domains: unique }),
+    body: JSON.stringify({ query, part }),
   });
   if (!res.ok) throw new Error("Could not check availability.");
-  const data: CheckDomainResponse = await res.json();
-
-  const map = new Map(data.results.map((r) => [r.domain, r]));
-  return domains.map(
-    (d) => map.get(d) ?? { domain: d, status: "unknown", source: "unknown" }
-  );
+  return res.json();
 }
 
 function useDebounced<T>(value: T, delay: number): T {
@@ -94,19 +89,12 @@ export function InstantSearch() {
   const normalizedQuery = debounced.trim().toLowerCase();
   const enabled = normalizedQuery.replace(/[^a-z0-9]/g, "").length >= 3;
 
-  const candidates = React.useMemo(
-    () => buildSearchCandidates(normalizedQuery),
-    [normalizedQuery]
-  );
-  const primaryDomain = candidates.query.primaryDomain;
-  const exactRest = candidates.exact.slice(1);
-
   // Headline domain: its own fast query so it renders almost immediately,
   // independent of the slower batch of TLDs + variations.
   const primaryQuery = useQuery({
-    queryKey: ["domain-search-primary", primaryDomain],
-    queryFn: async () => (await fetchMany([primaryDomain]))[0],
-    enabled: enabled && Boolean(primaryDomain),
+    queryKey: ["domain-search-primary", normalizedQuery],
+    queryFn: () => fetchSearch(normalizedQuery, "primary"),
+    enabled,
     staleTime: 60_000,
     placeholderData: keepPreviousData,
   });
@@ -115,13 +103,7 @@ export function InstantSearch() {
   // keeps the last results on screen while a new query resolves (no flicker).
   const restQuery = useQuery({
     queryKey: ["domain-search-rest", normalizedQuery],
-    queryFn: async () => {
-      const all = await fetchMany([...exactRest, ...candidates.variations]);
-      return {
-        exact: all.slice(0, exactRest.length),
-        variations: all.slice(exactRest.length),
-      };
-    },
+    queryFn: () => fetchSearch(normalizedQuery, "rest"),
     enabled,
     staleTime: 60_000,
     placeholderData: keepPreviousData,
@@ -129,7 +111,7 @@ export function InstantSearch() {
 
   const [statusFilter, setStatusFilter] = React.useState<StatusFilter>("all");
 
-  const primary = primaryQuery.data;
+  const primary = primaryQuery.data?.primary ?? undefined;
   const exact = React.useMemo(
     () => restQuery.data?.exact ?? [],
     [restQuery.data]
@@ -145,20 +127,20 @@ export function InstantSearch() {
   const counts = React.useMemo(() => {
     const all = [...(primary ? [primary] : []), ...exact, ...variations];
     return {
-      available: all.filter((r) => r.status === "available").length,
-      premium: all.filter((r) => r.status === "premium").length,
-      taken: all.filter((r) => r.status === "taken").length,
+      available: all.filter((r) => r.availability === "available").length,
+      premium: all.filter((r) => r.availability === "premium").length,
+      taken: all.filter((r) => r.availability === "taken").length,
     };
   }, [primary, exact, variations]);
 
-  const matches = (r: DomainAvailabilityResult) => {
+  const matches = (r: DomainResult) => {
     switch (statusFilter) {
       case "available":
-        return r.status === "available";
+        return r.availability === "available";
       case "premium":
-        return r.status === "premium";
+        return r.availability === "premium";
       case "taken":
-        return r.status === "taken";
+        return r.availability === "taken";
       default:
         return true;
     }
@@ -248,7 +230,7 @@ export function InstantSearch() {
             {exact.length > 0 ? (
               <ResultGrid results={exact.filter(matches)} />
             ) : (
-              <GridSkeleton rows={exactRest.length || 4} />
+              <GridSkeleton rows={SUPPORTED_TLDS.length - 1} />
             )}
           </Section>
 
@@ -334,7 +316,7 @@ function Section({
   );
 }
 
-function ResultGrid({ results }: { results: DomainAvailabilityResult[] }) {
+function ResultGrid({ results }: { results: DomainResult[] }) {
   if (results.length === 0) return null;
   return (
     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -345,12 +327,12 @@ function ResultGrid({ results }: { results: DomainAvailabilityResult[] }) {
   );
 }
 
-function useSaveToggle(result: DomainAvailabilityResult) {
+function useSaveToggle(result: DomainResult) {
   const items = useShortlistStore((s) => s.items);
   const toggle = useShortlistStore((s) => s.toggle);
   const saved = items.some((i) => i.domain === result.domain);
   const onToggle = () => {
-    toggle(buildResultFromAvailability(result));
+    toggle(result);
     toast[saved ? "message" : "success"](
       saved ? "Removed from shortlist" : "Saved to shortlist",
       { description: result.domain }
@@ -359,9 +341,10 @@ function useSaveToggle(result: DomainAvailabilityResult) {
   return { saved, onToggle };
 }
 
-function PrimaryResult({ result }: { result: DomainAvailabilityResult }) {
+function PrimaryResult({ result }: { result: DomainResult }) {
   const { saved, onToggle } = useSaveToggle(result);
-  const buyable = result.status === "available" || result.status === "premium";
+  const buyable =
+    result.availability === "available" || result.availability === "premium";
   const [label, tld] = splitDomain(result.domain);
 
   const handleCopy = async () => {
@@ -373,9 +356,9 @@ function PrimaryResult({ result }: { result: DomainAvailabilityResult }) {
     <div
       className={cn(
         "flex flex-col gap-4 rounded-2xl border p-5 sm:flex-row sm:items-center sm:justify-between",
-        result.status === "available"
+        result.availability === "available"
           ? "border-success/40 bg-success/5"
-          : result.status === "premium"
+          : result.availability === "premium"
             ? "border-amber-500/40 bg-amber-500/5"
             : "border-border bg-card"
       )}
@@ -385,7 +368,7 @@ function PrimaryResult({ result }: { result: DomainAvailabilityResult }) {
           <span
             className={cn(
               "size-2.5 shrink-0 rounded-full",
-              DOT_CLASSES[result.status]
+              DOT_CLASSES[result.availability]
             )}
           />
           <span className="truncate text-2xl font-bold tracking-tight sm:text-3xl">
@@ -394,7 +377,7 @@ function PrimaryResult({ result }: { result: DomainAvailabilityResult }) {
           </span>
         </div>
         <p className="mt-1 pl-5 text-sm text-muted-foreground">
-          {STATUS_LABEL[result.status]}
+          {STATUS_LABEL[result.availability]}
           {result.price &&
             ` · ${formatPrice(result.price.amount, result.price.currency)}/yr`}
         </p>
@@ -427,9 +410,10 @@ function PrimaryResult({ result }: { result: DomainAvailabilityResult }) {
   );
 }
 
-function SearchResultRow({ result }: { result: DomainAvailabilityResult }) {
+function SearchResultRow({ result }: { result: DomainResult }) {
   const { saved, onToggle } = useSaveToggle(result);
-  const buyable = result.status === "available" || result.status === "premium";
+  const buyable =
+    result.availability === "available" || result.availability === "premium";
   const [label, tld] = splitDomain(result.domain);
 
   const handleCopy = async () => {
@@ -440,7 +424,10 @@ function SearchResultRow({ result }: { result: DomainAvailabilityResult }) {
   return (
     <div className="group flex items-center gap-3 rounded-xl border border-border bg-card px-3 py-2.5 transition-colors hover:border-primary/30">
       <span
-        className={cn("size-2 shrink-0 rounded-full", DOT_CLASSES[result.status])}
+        className={cn(
+          "size-2 shrink-0 rounded-full",
+          DOT_CLASSES[result.availability]
+        )}
       />
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">
@@ -448,7 +435,7 @@ function SearchResultRow({ result }: { result: DomainAvailabilityResult }) {
           <span className="text-muted-foreground">.{tld}</span>
         </p>
         <p className="text-xs text-muted-foreground">
-          {STATUS_LABEL[result.status]}
+          {STATUS_LABEL[result.availability]}
           {result.price &&
             ` · ${formatPrice(result.price.amount, result.price.currency)}/yr`}
         </p>

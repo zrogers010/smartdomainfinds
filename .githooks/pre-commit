@@ -1,0 +1,4 @@
+#!/bin/sh
+# Block commits that contain likely secrets. Enable once with:
+#   git config core.hooksPath .githooks
+exec node scripts/check-secrets.mjs

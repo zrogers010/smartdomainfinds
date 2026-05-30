@@ -11,6 +11,70 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { DomainFinder } from "@/components/domain/domain-finder";
 
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+
+const FAQ = [
+  {
+    q: "Is SmartDomainFinds free?",
+    a: "Yes. You can generate brandable name ideas and check domain availability in real time for free, with no account required.",
+  },
+  {
+    q: "How does it check domain availability?",
+    a: "Availability is verified live against authoritative registry RDAP servers (the modern WHOIS replacement), so a domain is only marked available once it has actually been checked.",
+  },
+  {
+    q: "Which domain extensions does it support?",
+    a: "It checks popular extensions including .com, .ai, .io, .app, .dev, .xyz, .co, .org, .tech, .net, .online, and .store, plus brandable name variations.",
+  },
+  {
+    q: "What is the Smart Score?",
+    a: "Every name gets a deterministic Smart Score that combines availability with brandability, memorability, clarity, pronunciation, spelling, SEO relevance, and premium feel.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${appUrl}/#website`,
+      url: appUrl,
+      name: "SmartDomainFinds",
+      description:
+        "AI domain name generator with real-time availability checks and a Smart Score for every name.",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${appUrl}/?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@type": "WebApplication",
+      "@id": `${appUrl}/#webapp`,
+      name: "SmartDomainFinds",
+      url: appUrl,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Any",
+      browserRequirements: "Requires a modern web browser.",
+      description:
+        "Generate brandable domain names, check availability in real time, and score every option to pick the best one.",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${appUrl}/#faq`,
+      mainEntity: FAQ.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    },
+  ],
+};
+
 const FEATURES = [
   {
     Icon: Sparkles,
@@ -47,6 +111,10 @@ const FEATURES = [
 export default function Home() {
   return (
     <div className="flex min-h-dvh flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       <main className="flex-1">
         <DomainFinder />
@@ -80,6 +148,27 @@ export default function Home() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="border-t border-border/70 py-16">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6">
+            <h2 className="text-center text-2xl font-bold tracking-tight sm:text-3xl">
+              Frequently asked questions
+            </h2>
+            <dl className="mt-8 space-y-4">
+              {FAQ.map(({ q, a }) => (
+                <div
+                  key={q}
+                  className="rounded-xl border border-border bg-card p-5 shadow-sm"
+                >
+                  <dt className="text-base font-semibold">{q}</dt>
+                  <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {a}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </section>
       </main>

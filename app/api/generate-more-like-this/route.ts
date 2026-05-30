@@ -5,11 +5,15 @@ import { GenerateMoreRequestSchema } from "@/schemas/domain";
 import { generateDomainCandidates } from "@/lib/ai/generate-domain-candidates";
 import { assembleDomainResults } from "@/lib/domain/availability";
 import { normalizeDomain } from "@/lib/domain/utils";
+import { enforceRateLimit } from "@/lib/server/rate-limit";
 import type { GenerateMoreResponse, GenerateRequest } from "@/lib/domain/types";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  const limited = enforceRateLimit(req, "generate-more", 30, 60_000);
+  if (limited) return limited;
+
   let body: unknown;
   try {
     body = await req.json();

@@ -16,21 +16,7 @@ import {
   looksOverlyGeneric,
   looksTrademarkRisky,
 } from "@/lib/domain/utils";
-
-/**
- * Maximum points per bucket. These sum to 100. Availability dominates because
- * an unavailable name — however clever — cannot be bought.
- */
-export const SCORE_WEIGHTS = {
-  availability: 25,
-  brandability: 15,
-  memorability: 15,
-  clarity: 15,
-  pronunciation: 10,
-  spelling: 10,
-  seo: 5,
-  premiumFeel: 5,
-} as const;
+import { SCORE_WEIGHTS } from "@/lib/domain/score-display";
 
 /** AI-supplied 0-10 inputs that feed the deterministic score. */
 export type ScoreInputs = {
@@ -222,13 +208,4 @@ export function calculateSmartScore(params: {
     scores,
     penalties,
   };
-}
-
-/** Rounded 0-100 display values for each bucket, normalized to its weight. */
-export function scoreBucketPercent(
-  value: number,
-  bucketKey: keyof typeof SCORE_WEIGHTS
-): number {
-  const weight = SCORE_WEIGHTS[bucketKey];
-  return Math.round((value / weight) * 100);
 }
