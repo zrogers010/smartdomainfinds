@@ -1,5 +1,6 @@
 import { SUPPORTED_TLDS } from "@/lib/domain/types";
 import { normalizeDomain } from "@/lib/domain/utils";
+import { synonymsFor } from "@/lib/domain/thesaurus";
 
 /**
  * Prefixes/suffixes used to generate brandable variations of a searched name,
@@ -33,7 +34,10 @@ const SUFFIXES = [
   "io",
 ];
 
-const MAX_VARIATIONS = 12;
+/** Short suffixes that read well when hyphenated, e.g. "mybrand-app.com". */
+const HYPHEN_SUFFIXES = ["app", "hq", "io"];
+
+const MAX_VARIATIONS = 20;
 
 export type ParsedQuery = {
   /** Sanitized label (no dots/spaces), e.g. "smartdomainfinds". */
@@ -93,10 +97,24 @@ export function buildSearchCandidates(raw: string): SearchCandidates {
     if (!exactSet.includes(domain)) exactSet.push(domain);
   }
 
-  // Variations (.com), excluding the exact .com itself.
+  // Variations (.com), excluding the exact .com itself. We interleave synonym
+  // swaps, prefixes, suffixes, and a few hyphenated forms so the first slice
+  // shown is varied rather than 10 prefixes in a row.
+  const synonyms = synonymsFor(label);
   const variationSet = new Set<string>();
+
+  // Synonym swaps first — these are the most on-theme alternatives.
+  for (const s of synonyms) variationSet.add(`${s}.com`);
+  // Then synonym + the label as a compound (e.g. "swiftpay.com").
+  for (const s of synonyms.slice(0, 3)) variationSet.add(`${s}${label}.com`);
+  // Hyphenated forms next so dashes are represented before the long
+  // prefix/suffix lists fill up the remaining slots.
+  for (const s of HYPHEN_SUFFIXES) variationSet.add(`${label}-${s}.com`);
+  variationSet.add(`get-${label}.com`);
+
   for (const p of PREFIXES) variationSet.add(`${p}${label}.com`);
   for (const s of SUFFIXES) variationSet.add(`${label}${s}.com`);
+
   variationSet.delete(`${label}.com`);
 
   const variations = [...variationSet].slice(0, MAX_VARIATIONS);

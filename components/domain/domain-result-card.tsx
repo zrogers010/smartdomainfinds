@@ -112,10 +112,6 @@ export function DomainResultCard({
         <DomainScoreBadge score={result.smartScore} size={52} showLabel />
       </div>
 
-      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-        {result.rationale}
-      </p>
-
       {result.alternatives.length > 0 && (
         <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
           <span>Also free:</span>
@@ -144,6 +140,11 @@ export function DomainResultCard({
         </CollapsibleTrigger>
         <CollapsibleContent className="overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
           <div className="mt-3 space-y-4 rounded-lg border border-border/70 bg-muted/40 p-3">
+            {result.rationale && (
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {result.rationale}
+              </p>
+            )}
             <ScoreBreakdown scores={result.scores} />
             {result.risks.length > 0 && (
               <div>

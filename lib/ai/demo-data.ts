@@ -1,6 +1,7 @@
 import type { GeneratedName } from "@/schemas/domain";
 import type { DomainStyle, GenerateRequest } from "@/lib/domain/types";
 import { hashString } from "@/lib/domain/utils";
+import { expandKeywords } from "@/lib/domain/thesaurus";
 
 /**
  * Seeded, deterministic demo generator. Produces high-quality, varied name
@@ -81,28 +82,48 @@ function buildCandidates(idea: string, request: GenerateRequest): Candidate[] {
   const Primary = titleCase(primary);
   const Secondary = titleCase(secondary);
 
-  // Brandable: keyword + evocative suffix.
-  BRAND_SUFFIXES.slice(0, 8).forEach((suffix, i) => {
+  // Thesaurus: brandable synonyms of the keywords widen the pool with on-theme
+  // but distinct roots (e.g. "charts" -> "graph", "trend").
+  const synonyms = expandKeywords(keywords, 8);
+  const SynonymRoots = synonyms.map(titleCase);
+
+  // Brandable: keyword + evocative suffix. Alternate primary/secondary roots
+  // across a wide set of suffixes for plenty of distinct options.
+  BRAND_SUFFIXES.slice(0, 16).forEach((suffix, i) => {
     const root = i % 2 === 0 ? Primary : Secondary;
     push(`${root}${suffix}`, "brandable");
   });
 
+  // Brandable from synonyms: synonym root + evocative suffix.
+  SynonymRoots.forEach((root, i) => {
+    push(`${root}${pick(BRAND_SUFFIXES, seed + i * 5)}`, "brandable");
+  });
+
+  // Hyphenated descriptive variants (only a couple — hyphens are penalized but
+  // some users specifically want them, and the exact .com is often free).
+  push(`${primary}-${secondary}`, "descriptive");
+  if (SynonymRoots[0]) push(`${primary}-${synonyms[0]}`, "descriptive");
+
   // Premium: keyword + serious suffix.
-  PREMIUM_SUFFIXES.slice(0, 4).forEach((suffix, i) => {
+  PREMIUM_SUFFIXES.forEach((suffix, i) => {
     push(`${titleCase(keywords[i % keywords.length] ?? primary)}${suffix}`, "premium");
   });
 
   // Descriptive: combine two keywords or keyword + descriptive noun.
   push(`${Primary}${Secondary}`, "descriptive");
+  push(`${Secondary}${Primary}`, "descriptive");
   push(`${Primary}Studio`, "descriptive");
   push(`Smart${Primary}`, "descriptive");
+  push(`${Primary}HQ`, "descriptive");
 
   // SEO: prefix + keyword.
   push(`${Primary}Finder`, "seo");
   push(`${Primary}Generator`, "seo");
+  push(`Best${Primary}`, "seo");
+  push(`${Primary}App`, "seo");
 
   // Short / coined: deterministic invented names.
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     const start = pick(COINED_STARTS, seed + i * 7);
     const end = pick(COINED_ENDS, seed + i * 13);
     push(titleCase(start + end), "short");
@@ -110,7 +131,9 @@ function buildCandidates(idea: string, request: GenerateRequest): Candidate[] {
 
   // Playful: prefix + keyword.
   push(`${pick(PREFIXES, seed)}${Primary}`, "playful");
+  push(`${pick(PREFIXES, seed + 3)}${Secondary}`, "playful");
   push(`${Primary}ly`, "playful");
+  push(`${Secondary}ly`, "playful");
 
   // Domain hacks only when requested.
   if (request.styles?.includes("domain_hack")) {
@@ -147,7 +170,7 @@ function buildCandidates(idea: string, request: GenerateRequest): Candidate[] {
     filtered.push(c);
   }
 
-  return filtered.slice(0, 22);
+  return filtered.slice(0, 40);
 }
 
 const STYLE_RATIONALE: Record<DomainStyle, string> = {
@@ -197,12 +220,21 @@ export function generateDemoNames(request: GenerateRequest): GeneratedName[] {
   const candidates = buildCandidates(request.idea, request);
   const tlds = request.tlds?.length ? request.tlds : undefined;
 
+  // Per-style TLD bias toward extensions that read well for that style.
+  const STYLE_TLDS: Record<DomainStyle, string[]> = {
+    brandable: ["com", "ai", "app", "xyz"],
+    descriptive: ["com", "org", "net", "online"],
+    premium: ["com", "ai", "io", "co"],
+    seo: ["com", "tech", "online", "store"],
+    playful: ["com", "xyz", "app", "dev"],
+    short: ["com", "io", "ai", "co"],
+    domain_hack: ["ai", "io", "dev", "app"],
+  };
+
   return candidates.map(({ baseName, style }) => {
     const seed = hashString(baseName.toLowerCase());
     const suggestedTlds =
-      style === "domain_hack"
-        ? ["ai", "io"]
-        : tlds ?? ["com", style === "brandable" ? "ai" : "io"];
+      style === "domain_hack" ? STYLE_TLDS.domain_hack : tlds ?? STYLE_TLDS[style];
 
     return {
       baseName,

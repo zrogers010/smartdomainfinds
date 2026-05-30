@@ -10,7 +10,6 @@ import {
 import {
   DEFAULT_FILTERS,
   availableStyles,
-  availableTlds,
   type AvailabilityFilter,
   type DomainFilterState,
   type SortKey,
@@ -60,7 +59,6 @@ export function DomainFilters({
     value: DomainFilterState[K]
   ) => onChange({ ...filters, [key]: value });
 
-  const tlds = availableTlds(results);
   const styles = availableStyles(results);
 
   return (
@@ -134,23 +132,6 @@ export function DomainFilters({
               {styles.map((s) => (
                 <SelectItem key={s} value={s}>
                   {DOMAIN_STYLE_LABELS[s]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1.5">
-          <Label className="text-xs text-muted-foreground">TLD</Label>
-          <Select value={filters.tld} onValueChange={(v) => set("tld", v)}>
-            <SelectTrigger className="h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All TLDs</SelectItem>
-              {tlds.map((t) => (
-                <SelectItem key={t} value={t}>
-                  .{t}
                 </SelectItem>
               ))}
             </SelectContent>

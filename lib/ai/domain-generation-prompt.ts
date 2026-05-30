@@ -64,7 +64,7 @@ Output a JSON object of this exact shape:
 - All scoreInputs are integers from 0 to 10.
 - "baseName" preserves nice display casing (e.g. "PromptPulse").
 - Generate diverse candidates spanning the requested styles.
-- Produce between 18 and 24 distinct candidates.`;
+- Produce between 30 and 40 distinct candidates.`;
 
 /** Build the user prompt from the validated request + preferences. */
 export function buildDomainGenerationUserPrompt(

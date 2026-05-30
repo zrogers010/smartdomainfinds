@@ -3,30 +3,44 @@ import type { DomainAvailabilityResult } from "@/lib/domain/types";
 import { extractTld, normalizeDomain } from "@/lib/domain/utils";
 
 const SOURCE = "rdap";
-const REQUEST_TIMEOUT_MS = 7000;
-const CONCURRENCY = 8;
+const REQUEST_TIMEOUT_MS = 5000;
+const CONCURRENCY = 16;
 
 /**
- * TLDs for which rdap.org resolves to an authoritative RDAP server that
+ * Authoritative RDAP base URLs per TLD, taken from the IANA bootstrap registry
+ * (https://data.iana.org/rdap/dns.json). We hit each registry's RDAP server
+ * DIRECTLY instead of going through the rdap.org redirector — this is both
+ * faster and avoids rdap.org's aggressive throttling under concurrent load.
+ *
+ * A TLD is "trusted" iff it appears here. For trusted TLDs the registry
  * reliably distinguishes registered (HTTP 200) from unregistered (HTTP 404).
  *
- * IMPORTANT: some TLDs (e.g. .io, .co) have no working RDAP via the IANA
- * bootstrap, so rdap.org returns 404 even for clearly-registered domains. For
- * those we must report "unknown" rather than risk a false "available", per the
- * product rule that we never claim availability we haven't actually verified.
+ * IMPORTANT: some popular ccTLDs (e.g. .io, .co, .me) have NO RDAP server in
+ * the bootstrap registry, so they're intentionally absent and always resolve
+ * to "unknown" — we never claim availability we can't actually verify.
  */
-const TRUSTED_RDAP_TLDS = new Set(["com", "net", "ai", "app", "org", "dev"]);
+const RDAP_ENDPOINTS: Record<string, string> = {
+  com: "https://rdap.verisign.com/com/v1/",
+  net: "https://rdap.verisign.com/net/v1/",
+  org: "https://rdap.publicinterestregistry.org/rdap/",
+  ai: "https://rdap.identitydigital.services/rdap/",
+  info: "https://rdap.identitydigital.services/rdap/",
+  dog: "https://rdap.identitydigital.services/rdap/",
+  app: "https://pubapi.registry.google/rdap/",
+  dev: "https://pubapi.registry.google/rdap/",
+  page: "https://pubapi.registry.google/rdap/",
+  xyz: "https://rdap.centralnic.com/xyz/",
+  tech: "https://rdap.radix.host/rdap/",
+  store: "https://rdap.radix.host/rdap/",
+  online: "https://rdap.radix.host/rdap/",
+  site: "https://rdap.radix.host/rdap/",
+};
 
-/**
- * Resolve the RDAP endpoint for a domain. .com/.net go straight to Verisign's
- * authoritative RDAP service (fast, avoids rdap.org throttling under
- * concurrent load); other trusted TLDs use the rdap.org bootstrap redirector.
- */
-function rdapEndpoint(tld: string, domain: string): string {
-  const encoded = encodeURIComponent(domain);
-  if (tld === "com") return `https://rdap.verisign.com/com/v1/domain/${encoded}`;
-  if (tld === "net") return `https://rdap.verisign.com/net/v1/domain/${encoded}`;
-  return `https://rdap.org/domain/${encoded}`;
+/** Resolve the authoritative RDAP request URL for a domain, or null if its TLD has no trusted RDAP server. */
+function rdapEndpoint(tld: string, domain: string): string | null {
+  const base = RDAP_ENDPOINTS[tld];
+  if (!base) return null;
+  return `${base}domain/${encodeURIComponent(domain)}`;
 }
 
 /**
@@ -47,8 +61,9 @@ export class RdapProvider implements DomainAvailabilityProvider {
   async checkDomain(domain: string): Promise<DomainAvailabilityResult> {
     const normalized = normalizeDomain(domain);
     const tld = extractTld(normalized);
+    const endpoint = tld ? rdapEndpoint(tld, normalized) : null;
 
-    if (!tld || !TRUSTED_RDAP_TLDS.has(tld)) {
+    if (!endpoint) {
       return { domain: normalized, status: "unknown", source: SOURCE };
     }
 
@@ -56,7 +71,7 @@ export class RdapProvider implements DomainAvailabilityProvider {
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     try {
-      const res = await fetch(rdapEndpoint(tld, normalized), {
+      const res = await fetch(endpoint, {
         method: "GET",
         headers: { Accept: "application/rdap+json" },
         redirect: "follow",

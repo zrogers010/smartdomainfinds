@@ -26,8 +26,25 @@ export const DOMAIN_STYLE_LABELS: Record<DomainStyle, string> = {
   domain_hack: "Domain hack",
 };
 
-/** TLDs the generator tests, in priority order (.com first). */
-export const SUPPORTED_TLDS = ["com", "ai", "io", "co", "app", "net"] as const;
+/**
+ * TLDs the generator tests + the instant search checks, in rough popularity
+ * order (.com first). Most resolve to a trusted RDAP server; .io/.co have no
+ * RDAP and will show as "unknown" (we never fake their availability).
+ */
+export const SUPPORTED_TLDS = [
+  "com",
+  "ai",
+  "io",
+  "app",
+  "dev",
+  "xyz",
+  "co",
+  "org",
+  "tech",
+  "net",
+  "online",
+  "store",
+] as const;
 export type SupportedTld = (typeof SUPPORTED_TLDS)[number];
 
 export type DomainAvailabilityStatus =
@@ -80,12 +97,19 @@ export type DomainResult = {
   alternatives: string[];
 };
 
+/** A single spelling fix applied to the user's idea, e.g. miediavel -> medieval. */
+export type SpellingCorrection = { from: string; to: string };
+
 export type GenerateMetadata = {
   generatedCount: number;
   checkedCount: number;
   provider: string;
   /** True when results came from the seeded demo generator (no AI key). */
   usedFallback: boolean;
+  /** The idea text after spelling correction, present only when something changed. */
+  correctedIdea?: string;
+  /** Individual spelling fixes applied to the idea. */
+  corrections?: SpellingCorrection[];
 };
 
 export type GenerateResponse = {

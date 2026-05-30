@@ -17,8 +17,8 @@ import {
 } from "@/lib/domain/utils";
 import type { GeneratedName } from "@/schemas/domain";
 
-const MAX_CANDIDATES = 50;
-const MAX_TLDS_PER_NAME = 3;
+const MAX_CANDIDATES = 90;
+const MAX_TLDS_PER_NAME = 4;
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 /**
@@ -185,7 +185,7 @@ export async function assembleDomainResults(
   request: GenerateRequest,
   options: { limit?: number } = {}
 ): Promise<{ results: DomainResult[]; checkedCount: number }> {
-  const limit = options.limit ?? 18;
+  const limit = options.limit ?? 36;
 
   // 1. Expand candidates across TLDs.
   const candidates: Candidate[] = [];
