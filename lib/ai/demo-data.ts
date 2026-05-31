@@ -222,13 +222,13 @@ export function generateDemoNames(request: GenerateRequest): GeneratedName[] {
 
   // Per-style TLD bias toward extensions that read well for that style.
   const STYLE_TLDS: Record<DomainStyle, string[]> = {
-    brandable: ["com", "ai", "app", "xyz"],
-    descriptive: ["com", "org", "net", "online"],
-    premium: ["com", "ai", "io", "co"],
-    seo: ["com", "tech", "online", "store"],
-    playful: ["com", "xyz", "app", "dev"],
-    short: ["com", "io", "ai", "co"],
-    domain_hack: ["ai", "io", "dev", "app"],
+    brandable: ["com", "ai", "app", "xyz", "studio", "co"],
+    descriptive: ["com", "org", "net", "online", "site", "media"],
+    premium: ["com", "ai", "io", "co", "vip", "studio"],
+    seo: ["com", "tech", "online", "store", "shop", "digital"],
+    playful: ["com", "xyz", "app", "fun", "club", "space"],
+    short: ["com", "io", "ai", "co", "link", "live"],
+    domain_hack: ["ai", "io", "dev", "app", "design", "studio"],
   };
 
   return candidates.map(({ baseName, style }) => {

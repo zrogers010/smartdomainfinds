@@ -17,8 +17,8 @@ import {
 } from "@/lib/domain/utils";
 import type { GeneratedName } from "@/schemas/domain";
 
-const MAX_CANDIDATES = 90;
-const MAX_TLDS_PER_NAME = 4;
+const MAX_CANDIDATES = 120;
+const MAX_TLDS_PER_NAME = 6;
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 /**
@@ -142,6 +142,16 @@ function chooseTlds(name: GeneratedName, request: GenerateRequest): string[] {
   // Always consider .com unless the user restricted TLDs and excluded it.
   const set = new Set<string>(pool);
   if (!requested.length || requested.includes("com")) set.add("com");
+
+  // Unless the user explicitly restricted the TLDs, top up each name with the
+  // next strongest supported extensions so results genuinely span many TLDs and
+  // surface available alternatives across more than just the AI's suggestions.
+  if (!requested.length) {
+    for (const t of SUPPORTED_TLDS) {
+      if (set.size >= MAX_TLDS_PER_NAME) break;
+      set.add(t);
+    }
+  }
 
   // Fall back to supported defaults if we still have nothing.
   if (set.size === 0) SUPPORTED_TLDS.forEach((t) => set.add(t));

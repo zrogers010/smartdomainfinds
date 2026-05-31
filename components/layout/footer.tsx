@@ -15,6 +15,9 @@ const TOOL_LINKS = [
   { slug: "whois-lookup", name: "WHOIS & DNS lookup" },
   { slug: "bulk-domain-checker", name: "Bulk domain checker" },
   { slug: "ens-checker", name: "ENS (.eth) checker" },
+  { slug: "tx-checker", name: "Crypto tx checker" },
+  { slug: "crypto-wallet-checker", name: "Wallet & stablecoin checker" },
+  { slug: "nft-lookup", name: "NFT lookup" },
 ];
 
 export function Footer() {

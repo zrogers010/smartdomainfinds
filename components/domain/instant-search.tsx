@@ -112,10 +112,25 @@ export function InstantSearch() {
   const [statusFilter, setStatusFilter] = React.useState<StatusFilter>("all");
 
   const primary = primaryQuery.data?.primary ?? undefined;
-  const exact = React.useMemo(
-    () => restQuery.data?.exact ?? [],
-    [restQuery.data]
-  );
+  const exact = React.useMemo(() => {
+    const list = restQuery.data?.exact ?? [];
+    // Present fairly: .com always leads, then available/premium float up, with
+    // the original (TLD-priority) order preserved as the tiebreaker.
+    const availRank = (s: DomainAvailabilityStatus) =>
+      s === "available" ? 0 : s === "premium" ? 1 : 2;
+    return list
+      .map((r, i) => ({ r, i }))
+      .sort((a, b) => {
+        const aCom = a.r.tld === "com" ? 0 : 1;
+        const bCom = b.r.tld === "com" ? 0 : 1;
+        if (aCom !== bCom) return aCom - bCom;
+        const ar = availRank(a.r.availability);
+        const br = availRank(b.r.availability);
+        if (ar !== br) return ar - br;
+        return a.i - b.i;
+      })
+      .map((x) => x.r);
+  }, [restQuery.data]);
   const variations = React.useMemo(
     () => restQuery.data?.variations ?? [],
     [restQuery.data]
@@ -172,8 +187,8 @@ export function InstantSearch() {
       {/* Empty prompt */}
       {!enabled && !hasData && (
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          Type a name to instantly check availability across .com, .ai, .io,
-          .co, .app, and .net — plus brandable variations.
+          Type a name to instantly check availability across .com, .ai, .io and
+          30+ more extensions — plus brandable variations.
         </p>
       )}
 
