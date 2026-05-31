@@ -237,6 +237,12 @@ const NICHE_VOCAB: Record<string, NicheVocab> = {
     extraSuffixes: ["Kids", "Academy", "Learning", "Preschool", "Co"],
     themedTlds: ["care", "co", "academy"],
   },
+  "crypto-web3": {
+    roots: ["Ledger", "Cipher", "Vault", "Nexus", "Helix", "Quanta", "Prism", "Forge", "Relay", "Cinder", "Vertex", "Aether", "Nova", "Pulse", "Cobalt", "Onyx", "Cascade", "Pylon", "Beacon", "Zenith", "Lumen", "Stark", "Obsidian", "Quartz"],
+    modifiers: ["Open", "Meta", "Hyper", "Proto", "Prime"],
+    extraSuffixes: ["Protocol", "Labs", "Network", "Chain", "Vault"],
+    themedTlds: ["xyz", "io", "ai"],
+  },
 };
 
 type TldVocab = { roots: string[]; extraSuffixes?: string[]; modifiers?: string[] };
@@ -284,6 +290,76 @@ const TLD_VOCAB: Record<string, TldVocab> = {
   store: {
     roots: ["Shop", "Cart", "Market", "Goods", "Shelf", "Bazaar", "Outlet", "Supply", "Trove", "Vault", "Pantry", "Depot"],
     extraSuffixes: ["Goods", "Supply", "Market"],
+  },
+  info: {
+    roots: ["Guide", "Compass", "Atlas", "Beacon", "Index", "Brief", "Digest", "Lumen", "Scout", "Almanac", "Ledger", "Sage"],
+    extraSuffixes: ["Guide", "Hub", "Desk"],
+  },
+  site: {
+    roots: ["Nova", "Vibe", "Pixel", "Loft", "Studio", "Bright", "Halo", "Drift", "Canvas", "Spark", "Cedar", "Lumen"],
+  },
+  studio: {
+    roots: ["Form", "Canvas", "Atelier", "Pixel", "Frame", "Loom", "Verve", "Lumen", "Halo", "Marble", "Onyx", "Ember", "Vivid", "Prism"],
+    extraSuffixes: ["Works", "Lab", "Collective"],
+  },
+  design: {
+    roots: ["Form", "Canvas", "Pixel", "Prism", "Loom", "Marble", "Lumen", "Verve", "Onyx", "Halo", "Vivid", "Atelier", "Slate", "Bauhaus"],
+    extraSuffixes: ["Works", "Lab", "Studio"],
+  },
+  space: {
+    roots: ["Nova", "Orbit", "Comet", "Drift", "Lumen", "Vibe", "Loft", "Halo", "Pulse", "Zen", "Cobalt", "Cosmos"],
+    extraSuffixes: ["Lab", "Hub", "Collective"],
+  },
+  cloud: {
+    roots: ["Sync", "Scale", "Relay", "Vault", "Cobalt", "Nimbus", "Lattice", "Pylon", "Conduit", "Stratus", "Helix", "Vertex"],
+    extraSuffixes: ["Labs", "Stack", "Systems"],
+  },
+  shop: {
+    roots: ["Cart", "Trove", "Bazaar", "Goods", "Crate", "Nook", "Depot", "Parcel", "Stash", "Maple", "Harbor", "Pantry"],
+    extraSuffixes: ["Goods", "Market", "Supply"],
+  },
+  agency: {
+    roots: ["Echo", "Reach", "Vivid", "Halo", "Verve", "Catalyst", "Lumen", "Cadence", "Banner", "Beacon", "Plume", "Vantage"],
+    extraSuffixes: ["Collective", "Works", "Lab"],
+  },
+  media: {
+    roots: ["Echo", "Reel", "Frame", "Vivid", "Signal", "Pulse", "Static", "Loop", "Lumen", "Banter", "Wave", "Beacon"],
+    extraSuffixes: ["House", "Works", "Collective"],
+  },
+  digital: {
+    roots: ["Nova", "Pixel", "Vertex", "Cobalt", "Lumen", "Catalyst", "Pulse", "Relay", "Forge", "Spark", "Helix", "Vector"],
+    extraSuffixes: ["Labs", "Works", "Studio"],
+  },
+  world: {
+    roots: ["Wander", "Horizon", "Atlas", "Compass", "Mosaic", "Unity", "Bridge", "Kindred", "Lumen", "Beacon", "Grove", "Harbor"],
+    extraSuffixes: ["Collective", "Project"],
+  },
+  life: {
+    roots: ["Bloom", "Glow", "Serene", "Lush", "Verde", "Sage", "Halo", "Aura", "Lumen", "Bare", "Petal", "Dewy"],
+    extraSuffixes: ["Co", "Studio"],
+  },
+  live: {
+    roots: ["Pulse", "Echo", "Wave", "Signal", "Stage", "Reel", "Spark", "Vivid", "Loop", "Banter", "Surge", "Tempo"],
+    extraSuffixes: ["Studio", "Media"],
+  },
+  club: {
+    roots: ["Halo", "Verve", "Onyx", "Cobalt", "Ember", "Lumen", "Vivid", "Drift", "Nova", "Sable", "Velvet", "Spark"],
+    extraSuffixes: ["Collective", "Society"],
+  },
+  blog: {
+    roots: ["Quill", "Inkwell", "Page", "Folio", "Muse", "Scribe", "Lumen", "Banter", "Drift", "Vellum", "Echo", "Margin"],
+    extraSuffixes: ["Notes", "Journal"],
+  },
+  link: {
+    roots: ["Tap", "Hop", "Jump", "Loop", "Bridge", "Relay", "Snap", "Click", "Beacon", "Pulse", "Nova", "Drift"],
+    extraSuffixes: ["Hub", "Bio"],
+  },
+  fun: {
+    roots: ["Giggle", "Bounce", "Zip", "Bubble", "Spark", "Jolly", "Vibe", "Pixel", "Comet", "Doodle", "Wiggle", "Confetti"],
+  },
+  vip: {
+    roots: ["Onyx", "Velvet", "Sable", "Gilded", "Lustre", "Crown", "Opal", "Halo", "Marble", "Aurum", "Verve", "Luxe"],
+    extraSuffixes: ["Society", "Collective"],
   },
 };
 
@@ -356,7 +432,7 @@ export function exampleNamePoolForNicheCom(
   });
 }
 
-export function exampleNamePoolForTld(tld: string, count = 100): GeneratedName[] {
+export function exampleNamePoolForTld(tld: string, count = 60): GeneratedName[] {
   const vocab = TLD_VOCAB[tld] ?? TLD_VOCAB.com;
   return buildExampleNames({
     seedKey: `tld:${tld}`,

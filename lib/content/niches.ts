@@ -938,6 +938,35 @@ export const NICHES: Niche[] = [
     ],
     related: ["tutoring", "cleaning-service", "salon-spa"],
   },
+  {
+    slug: "crypto-web3",
+    name: "Crypto & Web3",
+    seedIdea: "a web3 crypto startup building a decentralized app (dApp)",
+    blurb:
+      "Bold, brandable name ideas for a crypto, web3, blockchain, or dApp project.",
+    intro:
+      "Crypto and web3 names should feel modern, technical, and ownable — distinctive enough to stand out in a crowded space and easy to type into a wallet or explorer. These ideas are brandable and future-proof, and each can be checked for an available domain (think .xyz, .io, or a clean .com).",
+    tips: [
+      "Lean into coined, ownable words — invented names trademark and rank better than generic 'coin/chain' combos.",
+      "Avoid trend-chasing terms that date fast; pick a name that survives the next cycle.",
+      "Secure the .com or a strong .xyz/.io, and grab the matching ENS (.eth) name and social handles so your identity is consistent on-chain and off.",
+    ],
+    faqs: [
+      {
+        q: "How do I name a crypto or web3 project?",
+        a: "Start from a short, coined, ownable word that hints at speed, trust, or your protocol's value, rather than stacking generic terms like 'coin' or 'chain'. Generate a batch, shortlist the ones with an available domain and ENS name, and say each out loud before committing.",
+      },
+      {
+        q: "Which domain extension is best for a crypto project?",
+        a: "A clean .com still carries the most trust, but .xyz and .io are hugely popular in web3 and far more available. Many projects also register a matching ENS (.eth) name for their on-chain identity — you can check that with our free ENS checker.",
+      },
+      {
+        q: "Should a web3 startup avoid 'coin' or 'token' in the name?",
+        a: "Usually yes. Overusing 'coin', 'token', or 'chain' makes names blend together and can create regulatory or trademark headaches. A distinctive, brandable name ages better and is easier to protect.",
+      },
+    ],
+    related: ["saas-startup", "gaming-esports", "marketing-agency"],
+  },
 ];
 
 const NICHE_MAP = new Map(NICHES.map((n) => [n.slug, n]));

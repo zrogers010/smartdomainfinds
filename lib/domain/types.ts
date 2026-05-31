@@ -27,23 +27,43 @@ export const DOMAIN_STYLE_LABELS: Record<DomainStyle, string> = {
 };
 
 /**
- * TLDs the generator tests + the instant search checks, in rough popularity
- * order (.com first). Most resolve to a trusted RDAP server; .io/.co have no
- * RDAP and will show as "unknown" (we never fake their availability).
+ * TLDs the generator tests + the instant search checks, in rough popularity /
+ * credibility order (.com first). Most resolve to a trusted RDAP server, so we
+ * can verify availability for real; .io/.co have NO RDAP server in the IANA
+ * bootstrap and always show as "unknown" (we never fake their availability),
+ * but they're kept because they're so widely used.
  */
 export const SUPPORTED_TLDS = [
   "com",
   "ai",
   "io",
+  "co",
   "app",
   "dev",
-  "xyz",
-  "co",
   "org",
-  "tech",
   "net",
+  "xyz",
+  "tech",
   "online",
   "store",
+  "info",
+  "site",
+  "studio",
+  "design",
+  "space",
+  "cloud",
+  "shop",
+  "agency",
+  "media",
+  "digital",
+  "world",
+  "life",
+  "live",
+  "club",
+  "blog",
+  "link",
+  "fun",
+  "vip",
 ] as const;
 export type SupportedTld = (typeof SUPPORTED_TLDS)[number];
 

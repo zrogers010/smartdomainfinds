@@ -3,9 +3,12 @@ import Link from "next/link";
 import {
   ArrowRight,
   AtSign,
+  Coins,
   Globe,
+  Image as ImageIcon,
   Layers,
   Quote,
+  Receipt,
   Type,
   Wallet,
 } from "lucide-react";
@@ -19,7 +22,7 @@ import { breadcrumbLd, itemListLd } from "@/lib/content/structured-data";
 
 const TITLE = "Free Domain & Branding Tools";
 const DESCRIPTION =
-  "A free toolkit for naming and launching your brand: username availability checker, WHOIS & DNS lookup, bulk domain checker, ENS (.eth) checker, slogan generator, and acronym generator.";
+  "A free toolkit for naming and launching your brand and exploring web3: username availability checker, WHOIS & DNS lookup, bulk domain checker, ENS (.eth) checker, multi-chain crypto transaction checker, wallet & stablecoin balance checker, NFT lookup, slogan generator, and acronym generator.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -38,6 +41,9 @@ const ICONS: Record<string, typeof Globe> = {
   "whois-lookup": Globe,
   "bulk-domain-checker": Layers,
   "ens-checker": Wallet,
+  "tx-checker": Receipt,
+  "crypto-wallet-checker": Coins,
+  "nft-lookup": ImageIcon,
   "slogan-generator": Quote,
   "acronym-generator": Type,
 };

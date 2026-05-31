@@ -10,9 +10,9 @@ import { JsonLd } from "@/components/content/json-ld";
 import { TLDS } from "@/lib/content/tlds";
 import { breadcrumbLd, itemListLd } from "@/lib/content/structured-data";
 
-const TITLE = "Domain Extensions Guide (.com, .ai, .io & more)";
+const TITLE = "Domain Extensions Guide (.com, .ai, .io & 25+ more)";
 const DESCRIPTION =
-  "Compare popular domain extensions — .com, .ai, .io, .app, .dev, .co and more. See who each TLD is best for, the pros and cons, and example available names.";
+  "Compare 30+ domain extensions — .com, .ai, .io, .app, .dev, .co, .studio, .design, .shop, .cloud and many more. See who each TLD is best for, the pros and cons, and example available names.";
 
 export const metadata: Metadata = {
   title: TITLE,

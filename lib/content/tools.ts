@@ -37,6 +37,27 @@ export const TOOLS: ToolMeta[] = [
       "Check ENS (.eth) name availability directly on the Ethereum blockchain — no wallet needed — with links to register on ENS or view on OpenSea.",
   },
   {
+    slug: "tx-checker",
+    name: "Crypto Transaction Checker",
+    tagline: "Verify any transaction across Ethereum, Base, Arbitrum & more.",
+    blurb:
+      "Paste a transaction hash to verify its status, value, gas fee, and confirmations on Ethereum, Base, Arbitrum, Optimism, Polygon, or BNB Chain — straight from the blockchain, no account needed.",
+  },
+  {
+    slug: "crypto-wallet-checker",
+    name: "Crypto Wallet & Stablecoin Checker",
+    tagline: "See native and USDC/USDT/DAI balances for any address.",
+    blurb:
+      "Look up any wallet address or ENS name to see its native balance and USDC, USDT, and DAI stablecoin holdings across Ethereum, Base, Arbitrum, Optimism, Polygon, and BNB Chain — on-chain and key-free.",
+  },
+  {
+    slug: "nft-lookup",
+    name: "NFT Lookup",
+    tagline: "Fetch any NFT's owner, metadata, and artwork by token ID.",
+    blurb:
+      "Enter an NFT contract address and token ID to view its collection, current owner, traits, and artwork across Ethereum, Base, Arbitrum, Optimism, Polygon, and BNB Chain — read directly on-chain.",
+  },
+  {
     slug: "slogan-generator",
     name: "Slogan Generator",
     tagline: "Instant tagline and slogan ideas for your brand.",

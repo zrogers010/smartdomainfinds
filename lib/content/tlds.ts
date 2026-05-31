@@ -375,6 +375,528 @@ export const TLDS: TldInfo[] = [
     ],
     related: ["online", "co", "xyz"],
   },
+  {
+    tld: "info",
+    label: "Information",
+    tagline: "A classic, descriptive extension for resource sites.",
+    intro:
+      ".info is one of the original generic extensions and reads as a place to learn or look something up. It's a recognizable, affordable option for guides, resource hubs, and knowledge bases when the .com is taken.",
+    bestFor: ["Resource and reference sites", "Guides and knowledge bases", "Informational projects"],
+    pros: [
+      "Self-explanatory and widely recognized.",
+      "Strong availability of descriptive names.",
+      "Affordable and trusted for content sites.",
+    ],
+    cons: [
+      "Less premium feel than .com for a commercial brand.",
+      "Has historically attracted some low-quality sites.",
+    ],
+    seedIdea: "an informational resource hub and knowledge base",
+    faqs: [
+      {
+        q: "Is a .info domain good?",
+        a: "For informational, reference, and resource sites it's a clear, affordable choice with good availability. For a product or commercial brand, .com or .co usually read as more premium.",
+      },
+      {
+        q: "Who uses .info domains?",
+        a: "Guides, knowledge bases, public-information projects, and content sites that want their purpose obvious in the name.",
+      },
+    ],
+    related: ["org", "online", "site"],
+  },
+  {
+    tld: "site",
+    label: "Websites",
+    tagline: "A clean, descriptive home for any website.",
+    intro:
+      ".site is a flexible, affordable extension that simply says you're online. It works for portfolios, small businesses, side projects, and landing pages, with excellent availability of short, descriptive names.",
+    bestFor: ["Portfolios and personal sites", "Small businesses and side projects", "Landing pages"],
+    pros: [
+      "Clear and easy to understand.",
+      "Great availability of brandable names.",
+      "Affordable to register.",
+    ],
+    cons: [
+      "Less premium than .com or .co.",
+      "Generic feel for a flagship brand.",
+    ],
+    seedIdea: "a personal portfolio and project website",
+    faqs: [
+      {
+        q: "Is .site a good domain extension?",
+        a: "It's a clear, affordable, widely-available option that suits portfolios, small businesses, and side projects. For a premium commercial brand, .com or .co feel stronger.",
+      },
+      {
+        q: "Who should use a .site domain?",
+        a: "Creators, freelancers, and small projects that want an obvious, budget-friendly web address when the .com is unavailable.",
+      },
+    ],
+    related: ["online", "space", "xyz"],
+  },
+  {
+    tld: "studio",
+    label: "Studios & Creatives",
+    tagline: "Made for design, photo, music, and creative studios.",
+    intro:
+      ".studio is a natural, on-brand home for creative businesses — design, photography, music, film, and agencies. It signals craft and creativity, and short, brandable names are far more available than on .com.",
+    bestFor: ["Design and creative studios", "Photographers and videographers", "Music and recording studios"],
+    pros: [
+      "Instantly signals a creative studio.",
+      "Excellent availability of brandable names.",
+      "Reads as modern and professional.",
+    ],
+    cons: [
+      "Longer than .com or .co.",
+      "Best suited to creative businesses specifically.",
+    ],
+    seedIdea: "a creative design and photography studio",
+    faqs: [
+      {
+        q: "Who should use a .studio domain?",
+        a: "Design, photography, film, music, and creative agencies — anyone whose brand centers on craft and studio work. It communicates that clearly and offers great name availability.",
+      },
+      {
+        q: "Is .studio a credible extension?",
+        a: "Yes. It's well-established with creative professionals and reads as modern and intentional, especially paired with a polished portfolio site.",
+      },
+    ],
+    related: ["design", "media", "agency"],
+  },
+  {
+    tld: "design",
+    label: "Designers",
+    tagline: "The signature extension for design brands.",
+    intro:
+      ".design tells the world exactly what you do. It's a favorite among product designers, studios, and agencies who want a descriptive, credible name — with availability that .com can't match.",
+    bestFor: ["Designers and design studios", "Agencies and portfolios", "Design tools and communities"],
+    pros: [
+      "Clearly communicates a design focus.",
+      "Strong availability of memorable names.",
+      "Credible and modern in creative circles.",
+    ],
+    cons: [
+      "Pricier than .com.",
+      "Niche — best for design-led brands.",
+    ],
+    seedIdea: "a product design studio and portfolio",
+    faqs: [
+      {
+        q: "Is .design good for a portfolio?",
+        a: "Yes — it's descriptive, credible with creative audiences, and offers far better availability than .com, making it a strong pick for designers and studios.",
+      },
+      {
+        q: "Who uses .design domains?",
+        a: "Product and graphic designers, design studios, agencies, and design tools or communities that want their craft in the name.",
+      },
+    ],
+    related: ["studio", "agency", "media"],
+  },
+  {
+    tld: "space",
+    label: "Creative & Startups",
+    tagline: "A versatile, modern extension with room to grow.",
+    intro:
+      ".space is a flexible, affordable extension embraced by startups, creators, and communities. It reads as open and modern — a good fit for coworking, communities, portfolios, and creative projects when the .com is gone.",
+    bestFor: ["Startups and creative projects", "Communities and coworking", "Portfolios and personal brands"],
+    pros: [
+      "Short, modern, and brandable.",
+      "Great availability of catchy names.",
+      "Affordable and unrestricted.",
+    ],
+    cons: [
+      "Less mainstream trust than .com.",
+      "Best paired with a polished site.",
+    ],
+    seedIdea: "a creative community and coworking space",
+    faqs: [
+      {
+        q: "Is .space a legitimate domain?",
+        a: "Yes — it's a fully legitimate, widely-used extension popular with startups, creators, and communities. As with any newer TLD, pair it with a quality site so it reads as trustworthy.",
+      },
+      {
+        q: "Who uses .space domains?",
+        a: "Startups, creative projects, communities, coworking brands, and personal portfolios wanting a short, modern name.",
+      },
+    ],
+    related: ["xyz", "site", "club"],
+  },
+  {
+    tld: "cloud",
+    label: "Cloud & SaaS",
+    tagline: "Purpose-built for SaaS and infrastructure brands.",
+    intro:
+      ".cloud is a descriptive, modern extension for SaaS products, hosting, and infrastructure companies. It signals that you're cloud-native and offers strong availability for technical, brandable names.",
+    bestFor: ["SaaS and cloud platforms", "Hosting and infrastructure", "Developer and data products"],
+    pros: [
+      "Clearly signals a cloud or SaaS product.",
+      "Great availability of technical names.",
+      "Modern and credible with tech buyers.",
+    ],
+    cons: [
+      "Best suited to cloud/SaaS specifically.",
+      "Less recognized by mainstream audiences.",
+    ],
+    seedIdea: "a cloud SaaS platform for businesses",
+    faqs: [
+      {
+        q: "Is .cloud good for a SaaS company?",
+        a: "Yes. It immediately communicates a cloud-based product, reads as modern to technical buyers, and has far better availability than .com for descriptive names.",
+      },
+      {
+        q: "Who uses .cloud domains?",
+        a: "SaaS platforms, hosting providers, infrastructure and data companies, and developer tools that want their cloud focus in the name.",
+      },
+    ],
+    related: ["io", "tech", "app"],
+  },
+  {
+    tld: "shop",
+    label: "Ecommerce",
+    tagline: "A clear, modern home for online shops.",
+    intro:
+      ".shop tells customers exactly what to expect and is purpose-built for ecommerce and retail. It's descriptive, modern, and available for product brands, boutiques, and direct-to-consumer launches.",
+    bestFor: ["Online shops and DTC brands", "Boutiques and product launches", "Retail and marketplaces"],
+    pros: [
+      "Instantly signals a place to buy.",
+      "Excellent availability for retail names.",
+      "Descriptive and SEO-friendly for shopping terms.",
+    ],
+    cons: [
+      "Fits ecommerce specifically.",
+      "Pricier than .com.",
+    ],
+    seedIdea: "an online shop selling products direct to consumers",
+    faqs: [
+      {
+        q: "Is .shop good for ecommerce?",
+        a: "Yes — it clearly communicates that you sell products, which helps shoppers and search relevance. It's a strong, available option for new retail brands and product launches.",
+      },
+      {
+        q: "Should I use .shop or .store?",
+        a: "Both are purpose-built for ecommerce and read clearly. Pick whichever pairs better with your name and is available; .shop tends to read a touch more modern.",
+      },
+    ],
+    related: ["store", "online", "co"],
+  },
+  {
+    tld: "agency",
+    label: "Agencies",
+    tagline: "Descriptive and on-brand for any agency.",
+    intro:
+      ".agency spells out what you are and gives marketing, creative, and service agencies a clear, credible home. Availability is excellent, so you can land a short, memorable name that .com can't offer.",
+    bestFor: ["Marketing and creative agencies", "Consultancies and service firms", "Studios and collectives"],
+    pros: [
+      "Clearly communicates an agency.",
+      "Strong availability of brandable names.",
+      "Descriptive and professional.",
+    ],
+    cons: [
+      "Longer than .com or .co.",
+      "Best suited to agencies specifically.",
+    ],
+    seedIdea: "a creative marketing agency",
+    faqs: [
+      {
+        q: "Is .agency a good domain?",
+        a: "For marketing, creative, and service agencies, yes — it's descriptive, credible, and widely available, so you can secure a clean, memorable name.",
+      },
+      {
+        q: "Who uses .agency domains?",
+        a: "Marketing, advertising, design, and consulting agencies, plus studios and collectives that want their model clear in the name.",
+      },
+    ],
+    related: ["studio", "media", "design"],
+  },
+  {
+    tld: "media",
+    label: "Media & Content",
+    tagline: "A natural fit for publishers and content brands.",
+    intro:
+      ".media reads as a home for content — publishers, production companies, podcasts, and creator brands. It's descriptive and modern, with great availability for memorable names.",
+    bestFor: ["Publishers and content brands", "Production and media companies", "Podcasts and creators"],
+    pros: [
+      "Clearly signals a media or content brand.",
+      "Great availability of memorable names.",
+      "Modern and professional.",
+    ],
+    cons: [
+      "Longer than .com or .tv.",
+      "Best for media and content specifically.",
+    ],
+    seedIdea: "a digital media and content production company",
+    faqs: [
+      {
+        q: "Who should use a .media domain?",
+        a: "Publishers, production companies, podcasts, newsletters, and creator brands that want their content focus in the name. Availability is strong and it reads cleanly.",
+      },
+      {
+        q: "Is .media a credible extension?",
+        a: "Yes — it's well-established with content and production businesses and reads as modern and intentional.",
+      },
+    ],
+    related: ["studio", "agency", "live"],
+  },
+  {
+    tld: "digital",
+    label: "Digital Brands",
+    tagline: "A descriptive extension for digital-first businesses.",
+    intro:
+      ".digital suits agencies, products, and services that are digital at their core. It's descriptive and modern, with excellent availability for clear, brandable names.",
+    bestFor: ["Digital agencies and studios", "Digital products and services", "Transformation and consulting"],
+    pros: [
+      "Signals a digital-first focus.",
+      "Excellent availability of names.",
+      "Modern and professional.",
+    ],
+    cons: [
+      "Longer than .com or .co.",
+      "Less recognized by mainstream audiences.",
+    ],
+    seedIdea: "a digital agency building products and services",
+    faqs: [
+      {
+        q: "Is .digital a good domain extension?",
+        a: "For digital agencies, products, and services it's descriptive, modern, and widely available, making it easy to land a clear, brandable name.",
+      },
+      {
+        q: "Who uses .digital domains?",
+        a: "Digital agencies, studios, product teams, and consultancies that want their digital focus in the name.",
+      },
+    ],
+    related: ["agency", "tech", "studio"],
+  },
+  {
+    tld: "world",
+    label: "Global & Communities",
+    tagline: "An expansive extension for global brands and communities.",
+    intro:
+      ".world reads as open, global, and community-minded. It's a flexible choice for movements, communities, events, and brands that want a big, welcoming feel — with great name availability.",
+    bestFor: ["Communities and movements", "Global brands and events", "Mission-driven projects"],
+    pros: [
+      "Expansive, welcoming, and memorable.",
+      "Great availability of evocative names.",
+      "Works across many industries.",
+    ],
+    cons: [
+      "Less premium than .com for a product brand.",
+      "Longer than short alternatives.",
+    ],
+    seedIdea: "a global community and movement brand",
+    faqs: [
+      {
+        q: "Who should use a .world domain?",
+        a: "Communities, movements, events, and brands that want an open, global, welcoming feel. It's evocative and widely available.",
+      },
+      {
+        q: "Is .world a legitimate extension?",
+        a: "Yes — it's a fully legitimate generic extension. Pair it with a strong brand and site and it reads as modern and intentional.",
+      },
+    ],
+    related: ["club", "life", "org"],
+  },
+  {
+    tld: "life",
+    label: "Lifestyle",
+    tagline: "A warm, human extension for lifestyle brands.",
+    intro:
+      ".life feels personal and human — a natural fit for wellness, coaching, lifestyle, and community brands. It's memorable and widely available for evocative names.",
+    bestFor: ["Wellness and coaching", "Lifestyle and community brands", "Personal brands and creators"],
+    pros: [
+      "Warm, human, and memorable.",
+      "Great availability of evocative names.",
+      "Works for personal and lifestyle brands.",
+    ],
+    cons: [
+      "Less corporate feel.",
+      "Not ideal for a technical product.",
+    ],
+    seedIdea: "a wellness and lifestyle coaching brand",
+    faqs: [
+      {
+        q: "Who uses .life domains?",
+        a: "Wellness coaches, lifestyle and community brands, creators, and personal brands that want a warm, human name. Availability is excellent.",
+      },
+      {
+        q: "Is .life a good domain?",
+        a: "For lifestyle, wellness, and personal brands it's evocative and widely available. For a corporate or technical product, .com or .co read stronger.",
+      },
+    ],
+    related: ["world", "live", "club"],
+  },
+  {
+    tld: "live",
+    label: "Streaming & Events",
+    tagline: "Built for streaming, events, and real-time brands.",
+    intro:
+      ".live reads as energetic and immediate — perfect for streamers, events, broadcasts, and real-time products. It's memorable and offers great availability for short, punchy names.",
+    bestFor: ["Streamers and broadcasts", "Events and conferences", "Real-time products"],
+    pros: [
+      "Energetic and immediate.",
+      "Great availability of punchy names.",
+      "Modern and memorable.",
+    ],
+    cons: [
+      "Best for live/real-time brands.",
+      "Less mainstream than .com.",
+    ],
+    seedIdea: "a live streaming and events platform",
+    faqs: [
+      {
+        q: "Who should use a .live domain?",
+        a: "Streamers, event brands, broadcasts, and real-time products that want energy and immediacy in the name. It's memorable and widely available.",
+      },
+      {
+        q: "Is .live a credible extension?",
+        a: "Yes — it's well-suited to streaming, events, and real-time brands and reads as modern, especially with a polished site.",
+      },
+    ],
+    related: ["media", "world", "fun"],
+  },
+  {
+    tld: "club",
+    label: "Communities & Membership",
+    tagline: "A welcoming extension for clubs and communities.",
+    intro:
+      ".club is purpose-built for communities, memberships, and groups. It signals belonging and is a natural fit for clubs, fan communities, and subscription brands — with great availability.",
+    bestFor: ["Clubs and communities", "Membership and subscription brands", "Fan and interest groups"],
+    pros: [
+      "Signals community and belonging.",
+      "Great availability of brandable names.",
+      "Short and memorable.",
+    ],
+    cons: [
+      "Best for community/membership brands.",
+      "Less premium for a flagship product.",
+    ],
+    seedIdea: "a membership community and club",
+    faqs: [
+      {
+        q: "Who uses .club domains?",
+        a: "Clubs, communities, membership and subscription brands, and fan or interest groups that want belonging in the name. Availability is strong.",
+      },
+      {
+        q: "Is .club a good domain?",
+        a: "For communities and membership brands it's descriptive and memorable, with great availability. For a corporate product, .com or .co read stronger.",
+      },
+    ],
+    related: ["space", "world", "vip"],
+  },
+  {
+    tld: "blog",
+    label: "Blogs & Creators",
+    tagline: "A clear home for blogs and creator content.",
+    intro:
+      ".blog says exactly what it is and is a natural fit for writers, creators, and content sites. It's descriptive, modern, and widely available for memorable names.",
+    bestFor: ["Blogs and writers", "Creators and newsletters", "Content and personal sites"],
+    pros: [
+      "Crystal-clear that you publish content.",
+      "Great availability of names.",
+      "Modern and SEO-friendly for content.",
+    ],
+    cons: [
+      "Fits content sites specifically.",
+      "Less premium for a product brand.",
+    ],
+    seedIdea: "a personal blog and newsletter",
+    faqs: [
+      {
+        q: "Is .blog a good domain?",
+        a: "For blogs, creators, and content sites it's clear, modern, and widely available. For a commercial product, .com or .co read more premium.",
+      },
+      {
+        q: "Who uses .blog domains?",
+        a: "Writers, creators, newsletters, and content sites that want their purpose obvious in the name.",
+      },
+    ],
+    related: ["media", "site", "online"],
+  },
+  {
+    tld: "link",
+    label: "Links & Bio",
+    tagline: "Short and perfect for link-in-bio and redirects.",
+    intro:
+      ".link is short and literal — ideal for link-in-bio pages, short links, and redirects. It reads as modern and utility-focused, with excellent availability for snappy names.",
+    bestFor: ["Link-in-bio and landing pages", "Short links and redirects", "Creators and personal brands"],
+    pros: [
+      "Short, literal, and modern.",
+      "Great availability of snappy names.",
+      "Perfect for links and redirects.",
+    ],
+    cons: [
+      "Niche — best for link/redirect use.",
+      "Less mainstream than .com.",
+    ],
+    seedIdea: "a link-in-bio and short link tool",
+    faqs: [
+      {
+        q: "Who should use a .link domain?",
+        a: "Creators and brands building link-in-bio pages, short links, or redirects. It's short, literal, and widely available.",
+      },
+      {
+        q: "Is .link a credible extension?",
+        a: "Yes — it's well-suited to link and redirect use cases and reads as modern and intentional.",
+      },
+    ],
+    related: ["site", "space", "co"],
+  },
+  {
+    tld: "fun",
+    label: "Playful Brands",
+    tagline: "A lighthearted extension for playful projects.",
+    intro:
+      ".fun is exactly what it sounds like — playful and approachable. It's a great fit for games, events, kids' brands, and side projects that don't take themselves too seriously, with wide availability.",
+    bestFor: ["Games and entertainment", "Events and kids' brands", "Playful side projects"],
+    pros: [
+      "Playful and approachable.",
+      "Great availability of catchy names.",
+      "Affordable and memorable.",
+    ],
+    cons: [
+      "Too casual for a corporate brand.",
+      "Less mainstream trust than .com.",
+    ],
+    seedIdea: "a playful games and entertainment brand",
+    faqs: [
+      {
+        q: "Who uses .fun domains?",
+        a: "Games, entertainment, events, kids' brands, and playful side projects that want a lighthearted name. Availability is strong.",
+      },
+      {
+        q: "Is .fun a legitimate domain?",
+        a: "Yes — it's a fully legitimate extension. It just reads as casual, so it's best for playful brands rather than corporate ones.",
+      },
+    ],
+    related: ["xyz", "space", "club"],
+  },
+  {
+    tld: "vip",
+    label: "Premium & Membership",
+    tagline: "An exclusive-feeling extension for premium brands.",
+    intro:
+      ".vip signals exclusivity and membership. It suits premium communities, events, creators, and loyalty brands that want a sense of access — with great availability for short, punchy names.",
+    bestFor: ["Premium communities and memberships", "Creators and loyalty brands", "Events and clubs"],
+    pros: [
+      "Signals exclusivity and access.",
+      "Short and memorable.",
+      "Great availability of names.",
+    ],
+    cons: [
+      "Niche — best for premium/membership brands.",
+      "Less mainstream than .com.",
+    ],
+    seedIdea: "a premium membership community and loyalty brand",
+    faqs: [
+      {
+        q: "Who should use a .vip domain?",
+        a: "Premium communities, memberships, creators, and loyalty brands that want a sense of exclusivity and access in the name.",
+      },
+      {
+        q: "Is .vip a credible extension?",
+        a: "Yes — it's well-suited to premium and membership brands and reads as intentional, especially paired with a polished experience.",
+      },
+    ],
+    related: ["club", "world", "co"],
+  },
 ];
 
 const TLD_MAP = new Map(TLDS.map((t) => [t.tld, t]));
