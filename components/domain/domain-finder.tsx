@@ -33,11 +33,26 @@ import { DomainResultsGrid } from "./domain-results-grid";
 import { LoadingDomainGrid } from "./loading-domain-card";
 
 async function postJson<T>(url: string, body: unknown): Promise<T> {
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  // Guard against a request that never resolves (e.g. a stalled dev recompile
+  // or a slow upstream) so the UI can surface an error instead of spinning.
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 45_000);
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      throw new Error("That took too long to respond. Please try again.");
+    }
+    throw new Error("Network error. Please check your connection and try again.");
+  } finally {
+    clearTimeout(timeout);
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const message =
@@ -87,10 +102,18 @@ export function DomainFinder() {
       setMetadata(data.metadata);
       setFilters(DEFAULT_FILTERS);
       addRecent(request.idea);
+      // Keep the idea in the URL for sharing — but ONLY when it actually
+      // changed. Next.js patches history.replaceState to drive its router, so
+      // a redundant write here re-navigates and remounts this component,
+      // re-triggering generation in a loop. Compare decoded values so a "%20"
+      // vs "+" difference doesn't count as a change.
       if (typeof window !== "undefined") {
-        const url = new URL(window.location.href);
-        url.searchParams.set("q", request.idea);
-        window.history.replaceState({}, "", url.toString());
+        const currentQ = new URLSearchParams(window.location.search).get("q");
+        if (currentQ !== request.idea) {
+          const url = new URL(window.location.href);
+          url.searchParams.set("q", request.idea);
+          window.history.replaceState({}, "", url.toString());
+        }
       }
       requestAnimationFrame(() => {
         resultsRef.current?.scrollIntoView({
@@ -153,6 +176,17 @@ export function DomainFinder() {
       runSearch(q, DEFAULT_PREFERENCES);
     }
   }, [runSearch]);
+
+  // Bring the results area into view the moment a generation kicks off, so the
+  // loading state is visible immediately (especially when arriving via ?q= and
+  // landing at the top of the hero).
+  React.useEffect(() => {
+    if (generate.isPending) {
+      requestAnimationFrame(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }, [generate.isPending]);
 
   const handleExample = (prompt: string) => {
     setIdea(prompt);

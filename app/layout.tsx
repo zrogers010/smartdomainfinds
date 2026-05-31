@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION;
 
 const TITLE = "SmartDomainFinds — AI Domain Name Generator & Availability Checker";
 const DESCRIPTION =
@@ -74,6 +75,9 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  ...(googleSiteVerification
+    ? { verification: { google: googleSiteVerification } }
+    : {}),
 };
 
 export const viewport: Viewport = {
