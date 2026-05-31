@@ -40,6 +40,12 @@ npm ci --include=dev
 log "Running tests"
 npm test
 
+# Pre-check example-name availability so the SEO landing pages render
+# registerable names. Best-effort: never blocks the deploy (the pages fall back
+# to the live generator if this is skipped or fails).
+log "Refreshing example-name availability cache"
+npm run availability:refresh || log "availability refresh skipped (continuing)"
+
 log "Building (next build → standalone)"
 npm run build
 

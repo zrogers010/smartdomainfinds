@@ -54,3 +54,6 @@ deploy/env.*.local
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated build-time availability cache (regenerated on each deploy)
+/lib/content/example-availability.generated.json
