@@ -77,13 +77,15 @@ function useSpellingSuggestion(idea: string): {
   dismiss: () => void;
 } {
   const debounced = useDebounced(idea, 500);
-  const [suggestion, setSuggestion] = React.useState<string | null>(null);
+  const [suggestionResult, setSuggestionResult] = React.useState<{
+    text: string;
+    suggestion: string | null;
+  }>({ text: "", suggestion: null });
   const dismissedRef = React.useRef<string | null>(null);
 
   React.useEffect(() => {
     const text = debounced.trim();
     if (text.length < 8) {
-      setSuggestion(null);
       return;
     }
     const controller = new AbortController();
@@ -102,19 +104,24 @@ function useSpellingSuggestion(idea: string): {
           corrected !== text &&
           corrected !== dismissedRef.current
         ) {
-          setSuggestion(corrected);
+          setSuggestionResult({ text, suggestion: corrected });
         } else {
-          setSuggestion(null);
+          setSuggestionResult({ text, suggestion: null });
         }
       })
       .catch(() => {});
     return () => controller.abort();
   }, [debounced]);
 
+  const suggestion =
+    debounced.trim().length >= 8 && suggestionResult.text === debounced.trim()
+      ? suggestionResult.suggestion
+      : null;
+
   const dismiss = React.useCallback(() => {
     dismissedRef.current = suggestion;
-    setSuggestion(null);
-  }, [suggestion]);
+    setSuggestionResult({ text: debounced.trim(), suggestion: null });
+  }, [debounced, suggestion]);
 
   return { suggestion, dismiss };
 }

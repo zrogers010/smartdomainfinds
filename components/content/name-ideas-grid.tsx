@@ -29,32 +29,43 @@ export function NameIdeasGrid({ names }: { names: GeneratedName[] }) {
   const [statuses, setStatuses] = React.useState<
     Record<string, DomainAvailabilityStatus>
   >({});
-  const [checking, setChecking] = React.useState(false);
+  const [checkedDomainsKey, setCheckedDomainsKey] = React.useState("");
 
   const domains = React.useMemo(
     () => names.map((n) => n.preferredDomain.toLowerCase()),
     [names]
   );
+  const domainsKey = React.useMemo(() => domains.join("|"), [domains]);
+  const activeStatuses = React.useMemo(
+    () => (checkedDomainsKey === domainsKey ? statuses : {}),
+    [checkedDomainsKey, domainsKey, statuses]
+  );
+  const checking = domains.length > 0 && checkedDomainsKey !== domainsKey;
 
   // Float available/premium names to the top once availability resolves, while
   // keeping the server-rendered order stable for crawlers (this runs only after
   // the client check completes).
   const orderedNames = React.useMemo(() => {
-    if (Object.keys(statuses).length === 0) return names;
+    if (Object.keys(activeStatuses).length === 0) return names;
     return names
       .map((name, i) => ({ name, i }))
       .sort((a, b) => {
-        const ra = STATUS_RANK[statuses[a.name.preferredDomain.toLowerCase()] ?? "unknown"] ?? 2;
-        const rb = STATUS_RANK[statuses[b.name.preferredDomain.toLowerCase()] ?? "unknown"] ?? 2;
+        const ra =
+          STATUS_RANK[
+            activeStatuses[a.name.preferredDomain.toLowerCase()] ?? "unknown"
+          ] ?? 2;
+        const rb =
+          STATUS_RANK[
+            activeStatuses[b.name.preferredDomain.toLowerCase()] ?? "unknown"
+          ] ?? 2;
         return ra - rb || a.i - b.i;
       })
       .map((x) => x.name);
-  }, [names, statuses]);
+  }, [activeStatuses, names]);
 
   React.useEffect(() => {
     if (domains.length === 0) return;
     const controller = new AbortController();
-    setChecking(true);
     fetch("/api/bulk-check", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -70,14 +81,14 @@ export function NameIdeasGrid({ names }: { names: GeneratedName[] }) {
       .catch(() => {
         /* Leave names without pills if the check fails. */
       })
-      .finally(() => setChecking(false));
+      .finally(() => setCheckedDomainsKey(domainsKey));
     return () => controller.abort();
-  }, [domains]);
+  }, [domains, domainsKey]);
 
   return (
     <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
       {orderedNames.map((name) => {
-        const status = statuses[name.preferredDomain.toLowerCase()];
+        const status = activeStatuses[name.preferredDomain.toLowerCase()];
         const showPill =
           status === "available" || status === "premium" || status === "taken";
         return (
