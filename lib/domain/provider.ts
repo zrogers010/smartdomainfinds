@@ -40,7 +40,10 @@ export async function getAvailabilityProvider(): Promise<DomainAvailabilityProvi
       );
       const apiKey = process.env.DOMAINR_API_KEY;
       if (apiKey) {
-        cachedProvider = new DomainrProvider(apiKey);
+        cachedProvider = new DomainrProvider(apiKey, {
+          mode:
+            process.env.DOMAINR_API_MODE === "legacy" ? "legacy" : "fastly",
+        });
         break;
       }
       // Missing credentials — degrade gracefully to mock.

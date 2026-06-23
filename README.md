@@ -58,7 +58,8 @@ Copy `.env.example` to `.env.local`. Everything is optional for local developmen
 | `OPENAI_MODEL` | `gpt-5.5` | Model used for generation. |
 | `OPENAI_BASE_URL` | OpenAI | Point at any OpenAI-compatible endpoint. |
 | `DOMAIN_PROVIDER` | `rdap` | `rdap` \| `mock` \| `domainr` \| `namecheap`. `rdap` returns real availability with no API key. |
-| `DOMAINR_API_KEY` | _(empty)_ | For the Domainr adapter (stubbed). |
+| `DOMAINR_API_KEY` | _(empty)_ | Enables the Domainr/Fastly Domain Research adapter. |
+| `DOMAINR_API_MODE` | `fastly` | `fastly` for current Fastly API tokens; `legacy` for older Domainr `client_id` credentials. |
 | `NAMECHEAP_API_USER` / `NAMECHEAP_API_KEY` / `NAMECHEAP_USERNAME` / `NAMECHEAP_CLIENT_IP` | _(empty)_ | For the Namecheap adapter (stubbed). |
 | `NEXT_PUBLIC_APP_URL` | `http://localhost:3000` | Used for metadata / shareable URLs. |
 
@@ -159,11 +160,11 @@ Penalties are applied for hyphens, numbers, awkward spelling, too many syllables
 - **`mock`:** `DOMAIN_PROVIDER=mock` returns deterministic results derived from a hash of each domain (stable for offline UI development), including fake premium prices. It does **not** perform real lookups.
 - **AI generation:** with no `OPENAI_API_KEY`, `generateDemoNames()` produces high-quality, deterministic candidates from your idea keywords. The UI shows a subtle "demo suggestions" note in this mode.
 
-## What is stubbed (ready for real integration)
+## Real provider integrations
 
-- `lib/domain/providers/domainr-provider.ts` — Domainr status API adapter (interface implemented, network calls TODO).
+- `lib/domain/providers/domainr-provider.ts` — Domainr/Fastly Domain Research status adapter. Default mode calls Fastly's current `/domain-management/v1/tools/status` endpoint with a `Fastly-Key` token; `DOMAINR_API_MODE=legacy` supports older Domainr `client_id` credentials.
 - `lib/domain/providers/namecheap-provider.ts` — Namecheap `domains.check` adapter (interface implemented, network calls TODO).
-- Both contain detailed `TODO(real-provider)` comments describing the exact endpoints and status mapping. A Cloudflare Registrar adapter has a placeholder in the provider factory.
+- A Cloudflare Registrar adapter has a placeholder in the provider factory.
 - In-memory availability cache in `availability.ts` with a `TODO(cache)` for Redis/Upstash.
 
 ---
@@ -207,6 +208,6 @@ Free / Pro / Agency tiers, registrar affiliate revenue, premium naming reports, 
 ## Next recommended steps
 
 1. Add `OPENAI_API_KEY` to enable real generation and compare output quality with the demo generator.
-2. Implement the Domainr adapter first (simplest API) and flip `DOMAIN_PROVIDER=domainr`.
+2. Add a `DOMAINR_API_KEY`, set `DOMAIN_PROVIDER=domainr`, and compare coverage/latency against RDAP.
 3. Add a shared cache (Upstash Redis) so availability is consistent across serverless instances.
 4. Layer in accounts + saved projects to unlock the Pro roadmap.
