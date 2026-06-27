@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sheet";
 
 const NAV_ITEMS = [
+  { href: "/drops", label: "Drops" },
   { href: "/business-name-ideas", label: "Name Ideas" },
   { href: "/domains", label: "Domain Extensions" },
   { href: "/tools", label: "Free Tools" },

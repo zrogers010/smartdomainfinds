@@ -1,4 +1,5 @@
 import {
+  ArrowRight,
   BadgeCheck,
   Gauge,
   Layers,
@@ -6,10 +7,12 @@ import {
   ShieldQuestion,
   Sparkles,
 } from "lucide-react";
+import Link from "next/link";
 
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { DomainFinder } from "@/components/domain/domain-finder";
+import { Button } from "@/components/ui/button";
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
@@ -118,6 +121,24 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <DomainFinder />
+
+        <section className="border-t border-border/70 py-8">
+          <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 sm:px-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-sm font-semibold">New: curated drops</p>
+              <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                Browse ranked domain finds with buyer logic, market rationale,
+                scoring, and registrar confirmation links.
+              </p>
+            </div>
+            <Button asChild variant="outline">
+              <Link href="/drops">
+                View drops
+                <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+          </div>
+        </section>
 
         <section className="border-t border-border/70 bg-muted/30 py-16">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
