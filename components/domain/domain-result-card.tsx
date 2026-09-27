@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import type { DomainResult } from "@/lib/domain/types";
 import { useShortlistStore } from "@/lib/store/shortlist-store";
 import { cn } from "@/lib/utils/cn";
+import { sendGAEvent } from "@/lib/utils/analytics";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -71,6 +72,21 @@ export function DomainResultCard({
       { description: result.domain }
     );
   }, [toggle, result, saved]);
+
+  const handleRegistrarClick = React.useCallback(() => {
+    // Fire GA4 event for W1-03 + W1-04 registrar click tracking.
+    sendGAEvent("registrar_outbound_click", {
+      domain: result.domain,
+      registrar: "namecheap",
+      affiliated: true, // Always true when using /go endpoint
+    });
+
+    // Also send domain_result_click for W1-04 funnel.
+    sendGAEvent("domain_result_click", {
+      domain: result.domain,
+      availability: result.availability,
+    });
+  }, [result.domain, result.availability]);
 
   return (
     <div
@@ -202,6 +218,7 @@ export function DomainResultCard({
             href={result.registrarUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={handleRegistrarClick}
           >
             Check registrar
             <ExternalLink className="size-3.5" />

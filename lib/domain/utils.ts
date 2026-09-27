@@ -190,14 +190,16 @@ export function dedupeDomains<T extends string>(domains: T[]): T[] {
 }
 
 /**
- * Build an outbound registrar search URL. Defaults to Namecheap's search page.
- * Later this can be swapped for affiliate links per registrar.
+ * Build an outbound registrar search URL via our first-party /go redirect (W1-03).
+ * The redirect logs clicks and includes affiliate params when env is configured.
  */
 export function getRegistrarSearchUrl(domain: string): string {
   const normalized = normalizeDomain(domain);
-  return `https://www.namecheap.com/domains/registration/results/?domain=${encodeURIComponent(
-    normalized
-  )}`;
+  const appUrl =
+    (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_APP_URL) ||
+    (typeof window !== "undefined" && window.location.origin) ||
+    "http://localhost:3000";
+  return `${appUrl}/api/go/registrar?domain=${encodeURIComponent(normalized)}`;
 }
 
 /** Whether a TLD string is one we support generating/checking. */

@@ -19,6 +19,7 @@ import {
 import { EXAMPLE_PROMPTS } from "@/lib/domain/ui-constants";
 import { useRecentSearchesStore } from "@/lib/store/recent-searches-store";
 import { useHydrated } from "@/lib/hooks/use-hydrated";
+import { sendGAEvent } from "@/lib/utils/analytics";
 import { Button } from "@/components/ui/button";
 import {
   DomainSearchForm,
@@ -102,6 +103,15 @@ export function DomainFinder() {
       setMetadata(data.metadata);
       setFilters(DEFAULT_FILTERS);
       addRecent(request.idea);
+
+      // W1-04: Fire GA4 success event with metadata.
+      sendGAEvent("domain_generate_success", {
+        used_fallback: data.metadata.usedFallback,
+        result_count: data.results.length,
+        checked_count: data.metadata.checkedCount,
+        provider: data.metadata.provider,
+      });
+
       // Keep the idea in the URL for sharing — but ONLY when it actually
       // changed. Next.js patches history.replaceState to drive its router, so
       // a redundant write here re-navigates and remounts this component,
@@ -123,6 +133,10 @@ export function DomainFinder() {
       });
     },
     onError: (err: Error) => {
+      // W1-04: Fire GA4 error event.
+      sendGAEvent("domain_generate_error", {
+        error_message: err.message,
+      });
       toast.error(err.message);
     },
   });
@@ -156,6 +170,16 @@ export function DomainFinder() {
         toast.error("Tell us a bit more about your idea (at least 8 characters).");
         return;
       }
+
+      // W1-04: Fire GA4 submit event before mutation starts.
+      sendGAEvent("domain_generate_submit", {
+        idea_length: trimmed.length,
+        has_industry: !!prefs.industry,
+        has_tone: !!prefs.tone,
+        tld_count: prefs.tlds?.length || 0,
+        style_count: prefs.styles?.length || 0,
+      });
+
       generate.mutate(buildRequest(trimmed, prefs));
     },
     [generate]
