@@ -304,6 +304,14 @@ export function DomainFinder() {
             </>
           )}
         </div>
+
+        <div className="border-t border-border/60 bg-muted/20 px-4 py-3 sm:px-6">
+          <p className="mx-auto max-w-3xl text-center text-xs leading-relaxed text-muted-foreground">
+            Availability is verified via registrar APIs and authoritative RDAP
+            servers. Registrar links may be affiliate links, meaning we may earn
+            a commission at no cost to you.
+          </p>
+        </div>
       </section>
 
       {/* AI generator results (idea mode only) */}

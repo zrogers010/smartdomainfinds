@@ -117,11 +117,27 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="mt-10 border-t border-border/60 pt-6 text-center">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} SmartDomainFinds. For research purposes
-            — always confirm availability with a registrar before purchasing.
-          </p>
+        <div className="mt-10 border-t border-border/60 pt-6">
+          <div className="flex flex-col items-center gap-3">
+            <nav aria-label="Legal" className="flex gap-4 text-xs">
+              <Link
+                href="/privacy"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Privacy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Terms
+              </Link>
+            </nav>
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} SmartDomainFinds. For research purposes
+              — always confirm availability with a registrar before purchasing.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
