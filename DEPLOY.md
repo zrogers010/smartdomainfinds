@@ -109,8 +109,8 @@ sudo nano /etc/caddy/Caddyfile           # set your real domain
 sudo systemctl enable --now caddy
 ```
 
-Point your domain's **A record** at the instance's Elastic IP before reloading
-Caddy so it can issue a certificate.
+Point your domain's **A** and **www CNAME** records at the instance before reloading
+Caddy so it can issue certificates for both apex and www (www redirects to apex).
 
 ---
 
