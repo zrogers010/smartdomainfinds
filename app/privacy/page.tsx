@@ -25,7 +25,7 @@ export default function PrivacyPage() {
           <div className="prose prose-slate mt-8 dark:prose-invert">
             <h2>Overview</h2>
             <p>
-              SmartDomainFinds ("we", "us", or "our") is a domain availability
+              SmartDomainFinds (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) is a domain availability
               research tool. This Privacy Policy explains how we collect, use,
               and protect your information when you use our service.
             </p>
@@ -60,7 +60,7 @@ export default function PrivacyPage() {
               service. Google Analytics collects information such as how often
               users visit this site, what pages they visit, and what other sites
               they used prior to coming to this site. We use the information we
-              get from Google Analytics to improve our service. Google's ability
+              get from Google Analytics to improve our service. Google&apos;s ability
               to use and share information collected by Google Analytics about
               your visits to this site is restricted by the{" "}
               <a
@@ -114,7 +114,7 @@ export default function PrivacyPage() {
               When you search for domain availability, we query authoritative
               registry RDAP (Registration Data Access Protocol) servers and
               third-party registrar APIs. These queries may include the domain
-              names you're checking. Each registry and registrar has its own
+              names you&apos;re checking. Each registry and registrar has its own
               privacy policy governing how they handle this data.
             </p>
 
@@ -160,13 +160,13 @@ export default function PrivacyPage() {
               <li>Objection to processing of your information</li>
             </ul>
             <p>
-              Since we don't require accounts, most data is processed
+              Since we don&apos;t require accounts, most data is processed
               ephemerally or stored locally on your device. You can clear your
-              browser's local storage at any time to remove stored preferences
+              browser&apos;s local storage at any time to remove stored preferences
               and shortlists.
             </p>
 
-            <h2>Children's Privacy</h2>
+            <h2>Children&apos;s Privacy</h2>
             <p>
               SmartDomainFinds is not intended for children under 13. We do not
               knowingly collect personal information from children under 13. If
@@ -186,7 +186,7 @@ export default function PrivacyPage() {
             <p>
               We may update this Privacy Policy from time to time. We will
               notify you of any changes by posting the new Privacy Policy on
-              this page and updating the "Last updated" date.
+              this page and updating the &quot;Last updated&quot; date.
             </p>
 
             <h2>Contact Us</h2>

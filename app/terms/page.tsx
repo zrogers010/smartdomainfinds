@@ -25,8 +25,8 @@ export default function TermsPage() {
           <div className="prose prose-slate mt-8 dark:prose-invert">
             <h2>Acceptance of Terms</h2>
             <p>
-              By accessing and using SmartDomainFinds (the "Service"), you
-              accept and agree to be bound by these Terms of Service ("Terms").
+              By accessing and using SmartDomainFinds (the &quot;Service&quot;), you
+              accept and agree to be bound by these Terms of Service (&quot;Terms&quot;).
               If you do not agree to these Terms, do not use the Service.
             </p>
 
@@ -92,7 +92,7 @@ export default function TermsPage() {
             <h2>Availability Information Disclaimer</h2>
             <p>
               <strong>Important:</strong> While we strive to provide accurate
-              domain availability information, the data is provided "as is" for
+              domain availability information, the data is provided &quot;as is&quot; for
               research purposes only. Availability status can change rapidly,
               and there may be delays between our checks and actual registry
               state.
@@ -193,7 +193,7 @@ export default function TermsPage() {
 
             <h3>No Warranty</h3>
             <p>
-              THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT
+              THE SERVICE IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT
               WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
               LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
               PURPOSE, OR NON-INFRINGEMENT.
@@ -251,7 +251,7 @@ export default function TermsPage() {
             <p>
               We reserve the right to modify these Terms at any time. Changes
               will be effective immediately upon posting to this page with an
-              updated "Last updated" date. Your continued use of the Service
+              updated &quot;Last updated&quot; date. Your continued use of the Service
               after changes constitutes acceptance of the revised Terms.
             </p>
 
