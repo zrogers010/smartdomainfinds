@@ -86,9 +86,9 @@ describe("passesRadioTest", () => {
 });
 
 describe("getRegistrarSearchUrl", () => {
-  it("builds an encoded registrar url", () => {
+  it("builds an encoded first-party redirect url", () => {
     const url = getRegistrarSearchUrl("PromptPulse.com");
+    expect(url).toContain("/api/go/registrar");
     expect(url).toContain("domain=promptpulse.com");
-    expect(url.startsWith("https://")).toBe(true);
   });
 });
