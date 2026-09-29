@@ -75,9 +75,12 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  ...(googleSiteVerification
-    ? { verification: { google: googleSiteVerification } }
-    : {}),
+  verification: {
+    ...(googleSiteVerification ? { google: googleSiteVerification } : {}),
+    other: {
+      "impact-site-verification": "4a8c93bd-9352-42a8-ac80-d316911c3e44",
+    },
+  },
 };
 
 export const viewport: Viewport = {
