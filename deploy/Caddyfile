@@ -3,9 +3,10 @@
 #
 # Caddy obtains and renews Let's Encrypt certificates automatically as long as
 # your DNS A record points at this server and ports 80/443 are open.
-#
-# If you also want www, add a redirect block (only after www DNS exists):
-#   www.smartdomainfinds.com { redir https://smartdomainfinds.com{uri} }
+
+www.smartdomainfinds.com {
+	redir https://smartdomainfinds.com{uri} permanent
+}
 
 smartdomainfinds.com {
 	encode zstd gzip
